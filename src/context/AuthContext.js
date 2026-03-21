@@ -1,12 +1,13 @@
 import React, { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext(null);
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
 
 function AuthProvider({ children }) {
   const [agentUser, setAgentUser] = useState(null);
 
   async function login(uid, password) {
-    const response = await fetch('http://localhost:5000/api/agents/login', {
+    const response = await fetch(`${API_BASE_URL}/api/agents/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ uid, password }),

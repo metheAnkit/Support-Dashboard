@@ -18,6 +18,11 @@
 .env.test.local
 .env.production.local
 
+# python local env and cache
+.venv/
+__pycache__/
+*.pyc
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

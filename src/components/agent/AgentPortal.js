@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { formatDate, getSeverityColor } from '../../utils';
 
 const STATUS_OPTIONS = ['New', 'Assigned', 'In Progress', 'Resolved', 'Closed'];
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
 
 // Initial state for the update form
 const EMPTY_UPDATE_FORM = {
@@ -43,7 +44,7 @@ function AgentPortal() {
     try {
       const uid = agentUser.uid || agentUser.agent_uid || agentUser.id;
       const response = await fetch(
-        `http://localhost:5000/api/agents/${encodeURIComponent(uid)}/incidents`
+        `${API_BASE_URL}/api/agents/${encodeURIComponent(uid)}/incidents`
       );
       const data = await response.json();
       if (!response.ok) {
@@ -153,7 +154,7 @@ function AgentPortal() {
       }
 
       const response = await fetch(
-        `http://localhost:5000/api/incidents/${encodeURIComponent(issueId)}/status`,
+        `${API_BASE_URL}/api/incidents/${encodeURIComponent(issueId)}/status`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -227,7 +228,6 @@ function AgentPortal() {
                 className="form-input"
                 value={loginForm.uid}
                 onChange={handleLoginChange}
-                placeholder="e.g. AGT001"
                 autoComplete="username"
                 autoFocus
               />
@@ -244,7 +244,6 @@ function AgentPortal() {
                 className="form-input"
                 value={loginForm.password}
                 onChange={handleLoginChange}
-                placeholder="Enter your password"
                 autoComplete="current-password"
               />
             </div>
@@ -443,7 +442,6 @@ function AgentPortal() {
                     className="form-input form-textarea"
                     value={updateForm.progress_notes}
                     onChange={handleUpdateChange}
-                    placeholder="Describe the progress made…"
                     rows={4}
                   />
                 </div>
@@ -464,7 +462,6 @@ function AgentPortal() {
                       className="form-input form-textarea"
                       value={updateForm.resolution_description}
                       onChange={handleUpdateChange}
-                      placeholder="Describe how the issue was resolved…"
                       rows={4}
                     />
                   </div>

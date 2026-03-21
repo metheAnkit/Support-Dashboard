@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { formatDate, getSeverityColor } from '../../utils';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+
 const EMPTY_REGISTER_FORM = {
   customer_id: '',
   name: '',
@@ -60,7 +62,7 @@ function CustomerPortal() {
 
     setRegisterLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/customers', {
+      const response = await fetch(`${API_BASE_URL}/api/customers`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(registerForm),
@@ -97,9 +99,9 @@ function CustomerPortal() {
     try {
       let url;
       if (searchType === 'issue_id') {
-        url = `http://localhost:5000/api/incidents/${encodeURIComponent(searchInput.trim())}`;
+        url = `${API_BASE_URL}/api/incidents/${encodeURIComponent(searchInput.trim())}`;
       } else {
-        url = `http://localhost:5000/api/customers/issues?email=${encodeURIComponent(searchInput.trim())}`;
+        url = `${API_BASE_URL}/api/customers/issues?email=${encodeURIComponent(searchInput.trim())}`;
       }
 
       const response = await fetch(url);
@@ -170,7 +172,6 @@ function CustomerPortal() {
                 className={`form-input${registerErrors.customer_id ? ' input-error' : ''}`}
                 value={registerForm.customer_id}
                 onChange={handleRegisterChange}
-                placeholder="e.g. CUST001"
                 autoComplete="off"
               />
               {registerErrors.customer_id && (
@@ -189,7 +190,6 @@ function CustomerPortal() {
                 className={`form-input${registerErrors.name ? ' input-error' : ''}`}
                 value={registerForm.name}
                 onChange={handleRegisterChange}
-                placeholder="Full legal name"
                 autoComplete="name"
               />
               {registerErrors.name && (
@@ -224,7 +224,6 @@ function CustomerPortal() {
                 className="form-input"
                 value={registerForm.mobile}
                 onChange={handleRegisterChange}
-                placeholder="+1 555 000 0000"
                 autoComplete="tel"
               />
             </div>
@@ -242,7 +241,6 @@ function CustomerPortal() {
                 className="form-input"
                 value={registerForm.email}
                 onChange={handleRegisterChange}
-                placeholder="customer@example.com"
                 autoComplete="email"
               />
             </div>
@@ -258,7 +256,6 @@ function CustomerPortal() {
                 className="form-input"
                 value={registerForm.location}
                 onChange={handleRegisterChange}
-                placeholder="City, Country"
               />
             </div>
           </div>
@@ -273,7 +270,6 @@ function CustomerPortal() {
               className="form-input form-textarea"
               value={registerForm.address}
               onChange={handleRegisterChange}
-              placeholder="Street address, City, State, ZIP"
               rows={3}
             />
           </div>
@@ -343,11 +339,6 @@ function CustomerPortal() {
               className="form-input"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              placeholder={
-                searchType === 'issue_id'
-                  ? 'Enter Issue ID (e.g. INC001)'
-                  : 'Enter email address'
-              }
               aria-label="Search input"
             />
             <button

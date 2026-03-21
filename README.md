@@ -1,45 +1,124 @@
-# Advanced Support Dashboard
+# Incident Engine: Support Dashboard + Flask API
 
-A React.js frontend dashboard for the Incident Management System, featuring a **Customer Portal** and an **Agent Portal**.
+This repository contains:
+- React frontend (`src/`) for customer and agent portals
+- Flask + MongoDB backend (`app.py`) for customer, incident, agent, and analytics APIs
 
----
+## Tech Stack
+
+- Python 3.10+
+- Flask
+- pymongo
+- flask-cors
+- bcrypt
+- MongoDB
+- React (frontend)
 
 ## Prerequisites
 
 - Node.js 16+ and npm
-- The Flask backend running at `http://localhost:5000`
+- Python 3.10+
+- MongoDB server running locally
 
----
+## Environment Variables
 
-## Installation
+Copy `.env.example` to `.env` and update values as needed.
+
+```env
+REACT_APP_API_BASE_URL=http://localhost:5000
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017
+MONGODB_DB=support_system
+```
+
+## Database Setup
+
+Run the MongoDB seed script:
+
+```bash
+mongosh < mongo_seed.js
+```
+
+Optional query examples are available in `mongo_queries.js`.
+
+## Backend Setup
+
+Install Python dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the backend server:
+
+```bash
+python app.py
+```
+
+Backend starts on `http://localhost:5000` by default.
+
+Health check:
+
+```http
+GET /
+```
+
+## Frontend Setup
+
+Install frontend dependencies:
 
 ```bash
 npm install
 ```
 
----
-
-## Running the App
+Run frontend app:
 
 ```bash
 npm start
 ```
 
-The app opens at [http://localhost:3000](http://localhost:3000).
+Frontend opens at `http://localhost:3000`.
 
----
+## API Reference
 
-## Connecting to the Backend
+### Customer APIs
+- `POST /api/customers`
+- `GET /api/customers`
+- `GET /api/customers/<customer_id>`
+- `GET /api/customers/issues?email=<email>`
 
-All API calls use `http://localhost:5000` as the base URL. Ensure the Flask backend is running before using the portals.
+### Incident APIs
+- `POST /api/incidents`
+- `GET /api/incidents`
+- `GET /api/incidents/<issue_id>`
+- `PUT /api/incidents/assign`
+- `PUT /api/incidents/<issue_id>/status`
+- `GET /api/incidents/search`
 
-If your backend runs on a different port or host, update the `REACT_APP_API_BASE_URL` value in a `.env` file (see `.env.example`).
+Supported search query params:
+- `issue_id`
+- `customer_id`
+- `agent_id`
+- `status`
+- `severity`
+- `date_from`
+- `date_to`
+- `keyword`
 
-> **Note:** The app currently hardcodes `http://localhost:5000`. To use the environment variable, replace API base URLs in the source files with `` `${process.env.REACT_APP_API_BASE_URL}/api/...` ``.
+### Agent APIs
+- `POST /api/agents`
+- `POST /api/agents/login`
+- `GET /api/agents/<uid>`
+- `PUT /api/agents/<uid>`
+- `GET /api/agents/<uid>/incidents`
 
----
+### Analytics APIs
+- `GET /api/analytics/stats`
+- `GET /api/analytics/status`
+- `GET /api/analytics/severity`
+- `GET /api/analytics/trend`
 
-## API Endpoints Used
+## Notes
 
 | Method | Endpoint | Portal |
 |--------|----------|--------|
@@ -50,9 +129,17 @@ If your backend runs on a different port or host, update the `REACT_APP_API_BASE
 | GET | `/api/agents/<uid>/incidents` | Agent - Incident list |
 | PUT | `/api/incidents/<issue_id>/status` | Agent - Update status |
 
----
+- New agent registrations are stored with bcrypt-hashed passwords.
+- Login supports one-time migration of legacy plain-text seed passwords to bcrypt hash.
+- `mongo_seed.js` includes at least 10 incidents covering all required status and severity values.
 
-## Project Structure
+## Submission Artifacts Included
+
+- `app.py`
+- `requirements.txt`
+- `mongo_seed.js`
+- `mongo_queries.js`
+- `.env.example`
 
 ```
 src/
@@ -98,3 +185,7 @@ See the `screenshots/` folder for:
 4. Agent login form
 5. Agent dashboard with incident table
 6. Update modal open
+
+## Additional Submission Files
+
+You can add your Postman collection JSON and ER diagram file to this repository before final submission.

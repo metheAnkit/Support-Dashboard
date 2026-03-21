@@ -94,6 +94,14 @@ body {
   border-bottom: 2px solid var(--color-border);
   padding: 0;
   overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tab-bar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 .tab-button {
@@ -721,6 +729,7 @@ body {
     gap: 2px;
     padding: 8px 0;
     background: var(--color-bg);
+    overflow: hidden;
   }
 
   .tab-button {
