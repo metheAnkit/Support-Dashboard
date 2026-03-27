@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { formatDate, getSeverityColor } from '../../utils';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
 
 const EMPTY_REGISTER_FORM = {
   customer_id: '',
@@ -13,6 +13,14 @@ const EMPTY_REGISTER_FORM = {
   location: '',
 };
 
+const EMPTY_INCIDENT_FORM = {
+  customer_id: '',
+  customer_email: '',
+  summary: '',
+  description: '',
+  severity: 'Medium',
+};
+
 function CustomerPortal() {
   // ── Register Customer state ──────────────────────────────────────────────
   const [registerForm, setRegisterForm] = useState(EMPTY_REGISTER_FORM);
@@ -20,6 +28,12 @@ function CustomerPortal() {
   const [registerLoading, setRegisterLoading] = useState(false);
   const [registerSuccess, setRegisterSuccess] = useState('');
   const [registerError, setRegisterError] = useState('');
+
+  // ── Report Incident state ──────────────────────────────────────────────
+  const [incidentForm, setIncidentForm] = useState(EMPTY_INCIDENT_FORM);
+  const [incidentLoading, setIncidentLoading] = useState(false);
+  const [incidentError, setIncidentError] = useState('');
+  const [incidentSuccess, setIncidentSuccess] = useState('');
 
   // ── Track Issue state ────────────────────────────────────────────────────
   const [searchType, setSearchType] = useState('issue_id'); // 'issue_id' | 'email'
@@ -46,7 +60,22 @@ function CustomerPortal() {
     if (!registerForm.name.trim()) {
       errors.name = 'Full Name is required.';
     }
+    if (!registerForm.mobile.trim()) {
+      errors.mobile = 'Mobile Number is required.';
+    }
+    if (!registerForm.email.trim()) {
+      errors.email = 'Email Address is required.';
+    }
+    if (!registerForm.location.trim()) {
+      errors.location = 'Location is required.';
+    }
     return errors;
+  }
+
+  function handleIncidentChange(e) {
+    const { name, value } = e.target;
+    setIncidentForm((prev) => ({ ...prev, [name]: value }));
+    if (incidentError) setIncidentError('');
   }
 
   async function handleRegisterSubmit(e) {
@@ -83,6 +112,60 @@ function CustomerPortal() {
     }
   }
 
+  async function handleIncidentSubmit(e) {
+    e.preventDefault();
+    setIncidentError('');
+    setIncidentSuccess('');
+
+    if (!incidentForm.customer_id.trim() || !incidentForm.summary.trim()) {
+      setIncidentError('Customer ID and issue summary are required to log an incident.');
+      return;
+    }
+
+    setIncidentLoading(true);
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/incidents`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer_id: incidentForm.customer_id.trim(),
+          customer_email: incidentForm.customer_email.trim(),
+          summary: incidentForm.summary.trim(),
+          description: incidentForm.description.trim(),
+          severity: incidentForm.severity,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        setIncidentError(data.message || data.error || 'Failed to log incident.');
+        return;
+      }
+
+      const createdIssueId = data.issue_id || '';
+      const emailSent = data.email_sent === true;
+      if (!emailSent) {
+        const backendReason = data.error ? ` Reason: ${data.error}` : '';
+        setIncidentError(
+          `Incident was logged but issue ID email was not confirmed.${backendReason}`
+        );
+        return;
+      }
+
+      setIncidentSuccess(`Incident logged successfully. Issue ID ${createdIssueId} has been sent to your email.`);
+      setIncidentForm(EMPTY_INCIDENT_FORM);
+
+      if (createdIssueId) {
+        setSearchType('issue_id');
+        setSearchInput(createdIssueId);
+      }
+    } catch {
+      setIncidentError('Network error. Could not log incident.');
+    } finally {
+      setIncidentLoading(false);
+    }
+  }
+
   // ── Track Issue handlers ─────────────────────────────────────────────────
   async function handleSearch(e) {
     e.preventDefault();
@@ -108,7 +191,11 @@ function CustomerPortal() {
       const data = await response.json();
 
       if (!response.ok) {
-        setSearchError(data.message || data.error || 'No results found.');
+        if (searchType === 'issue_id') {
+          setSearchError('Issue ID is not found');
+        } else {
+          setSearchError('Email is not found');
+        }
         return;
       }
 
@@ -117,7 +204,7 @@ function CustomerPortal() {
       } else {
         const list = Array.isArray(data) ? data : data.incidents || [];
         if (list.length === 0) {
-          setSearchError('No issues found for this email address.');
+          setSearchError('Email is not found');
         } else {
           setIncidentList(list);
         }
@@ -147,7 +234,7 @@ function CustomerPortal() {
   }
 
   return (
-    <div className="portal-container">
+    <div className="portal-container customer-portal">
       {/* ══ Section 1: Register Customer ══════════════════════════════════ */}
       <section className="portal-section">
         <h2 className="section-heading">Register Customer</h2>
@@ -215,48 +302,57 @@ function CustomerPortal() {
 
             <div className="form-group">
               <label htmlFor="mobile" className="form-label">
-                Mobile Number
+                Mobile Number <span className="required">*</span>
               </label>
               <input
                 id="mobile"
                 name="mobile"
                 type="tel"
-                className="form-input"
+                className={`form-input${registerErrors.mobile ? ' input-error' : ''}`}
                 value={registerForm.mobile}
                 onChange={handleRegisterChange}
                 autoComplete="tel"
               />
+              {registerErrors.mobile && (
+                <span className="inline-error">{registerErrors.mobile}</span>
+              )}
             </div>
           </div>
 
           <div className="form-row form-row--two-col">
             <div className="form-group">
               <label htmlFor="email" className="form-label">
-                Email Address
+                Email Address <span className="required">*</span>
               </label>
               <input
                 id="email"
                 name="email"
                 type="email"
-                className="form-input"
+                className={`form-input${registerErrors.email ? ' input-error' : ''}`}
                 value={registerForm.email}
                 onChange={handleRegisterChange}
                 autoComplete="email"
               />
+              {registerErrors.email && (
+                <span className="inline-error">{registerErrors.email}</span>
+              )}
             </div>
 
             <div className="form-group">
               <label htmlFor="location" className="form-label">
-                Location
+                Location <span className="required">*</span>
               </label>
               <input
                 id="location"
                 name="location"
                 type="text"
-                className="form-input"
+                className={`form-input${registerErrors.location ? ' input-error' : ''}`}
                 value={registerForm.location}
                 onChange={handleRegisterChange}
               />
+              {registerErrors.location && (
+                <span className="inline-error">{registerErrors.location}</span>
+              )}
             </div>
           </div>
 
@@ -291,7 +387,118 @@ function CustomerPortal() {
         </form>
       </section>
 
-      {/* ══ Section 2: Track My Issue ══════════════════════════════════════ */}
+      {/* ══ Section 2: Log Incident ═══════════════════════════════════════ */}
+      <section className="portal-section">
+        <h2 className="section-heading">Log New Incident</h2>
+        <p className="section-subtext">
+          Submit an incident first. Tracking becomes available only after the issue ID email is sent successfully.
+        </p>
+
+        {incidentSuccess && (
+          <div className="message success-message">{incidentSuccess}</div>
+        )}
+        {incidentError && (
+          <div className="message error-message">{incidentError}</div>
+        )}
+
+        <form className="form" onSubmit={handleIncidentSubmit} noValidate>
+          <div className="form-row form-row--two-col">
+            <div className="form-group">
+              <label htmlFor="incident_customer_id" className="form-label">
+                Customer ID <span className="required">*</span>
+              </label>
+              <input
+                id="incident_customer_id"
+                name="customer_id"
+                type="text"
+                className="form-input"
+                value={incidentForm.customer_id}
+                onChange={handleIncidentChange}
+                autoComplete="off"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="incident_customer_email" className="form-label">
+                Customer Email
+              </label>
+              <input
+                id="incident_customer_email"
+                name="customer_email"
+                type="email"
+                className="form-input"
+                value={incidentForm.customer_email}
+                onChange={handleIncidentChange}
+                autoComplete="email"
+              />
+            </div>
+          </div>
+
+          <div className="form-row form-row--two-col">
+            <div className="form-group">
+              <label htmlFor="incident_summary" className="form-label">
+                Issue Summary <span className="required">*</span>
+              </label>
+              <input
+                id="incident_summary"
+                name="summary"
+                type="text"
+                className="form-input"
+                value={incidentForm.summary}
+                onChange={handleIncidentChange}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="incident_severity" className="form-label">
+                Severity <span className="required">*</span>
+              </label>
+              <select
+                id="incident_severity"
+                name="severity"
+                className="form-input form-select"
+                value={incidentForm.severity}
+                onChange={handleIncidentChange}
+              >
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="incident_description" className="form-label">
+              Detailed Description
+            </label>
+            <textarea
+              id="incident_description"
+              name="description"
+              className="form-input form-textarea"
+              value={incidentForm.description}
+              onChange={handleIncidentChange}
+              rows={3}
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={incidentLoading}
+          >
+            {incidentLoading ? (
+              <span className="btn-loading">
+                <span className="spinner-inline" />
+                Logging…
+              </span>
+            ) : (
+              'Log Incident'
+            )}
+          </button>
+        </form>
+      </section>
+
+      {/* ══ Section 3: Track My Issue ══════════════════════════════════════ */}
       <section className="portal-section">
         <h2 className="section-heading">Track My Issue</h2>
 

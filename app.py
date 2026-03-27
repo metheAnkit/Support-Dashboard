@@ -1,7 +1,9 @@
 import os
 import re
+import smtplib
 import uuid
 from datetime import date, datetime, timedelta
+from email.message import EmailMessage
 
 from bcrypt import checkpw, gensalt, hashpw
 from flask import Flask, jsonify, request
@@ -39,6 +41,45 @@ except Exception:
 
 STATUS_VALUES = ['New', 'Assigned', 'In Progress', 'Resolved', 'Closed']
 SEVERITY_VALUES = ['Low', 'Medium', 'High']
+
+
+def parse_bool(value: str, default: bool = False) -> bool:
+    if value is None:
+        return default
+    return str(value).strip().lower() in {'1', 'true', 'yes', 'y', 'on'}
+
+
+def send_issue_id_email(recipient_email: str, issue_id: str, summary: str):
+    smtp_host = os.getenv('SMTP_HOST', '').strip()
+    smtp_port = int(os.getenv('SMTP_PORT', '587'))
+    smtp_user = os.getenv('SMTP_USER', '').strip()
+    smtp_pass = os.getenv('SMTP_PASS', '').strip().replace(' ', '')
+    smtp_from = os.getenv('SMTP_FROM', smtp_user).strip()
+    smtp_use_tls = parse_bool(os.getenv('SMTP_USE_TLS', 'true'), default=True)
+
+    if not smtp_host or not smtp_from:
+        raise RuntimeError('SMTP is not configured. Set SMTP_HOST and SMTP_FROM/SMTP_USER.')
+
+    message = EmailMessage()
+    message['Subject'] = f'Incident Logged: {issue_id}'
+    message['From'] = smtp_from
+    message['To'] = recipient_email
+    message.set_content(
+        f"""Your incident has been logged successfully.
+
+Issue ID: {issue_id}
+Summary: {summary}
+
+Use this Issue ID or your email to track the incident in the Support Dashboard.
+"""
+    )
+
+    with smtplib.SMTP(smtp_host, smtp_port, timeout=15) as server:
+        if smtp_use_tls:
+            server.starttls()
+        if smtp_user:
+            server.login(smtp_user, smtp_pass)
+        server.send_message(message)
 
 
 def now_string() -> str:
@@ -121,9 +162,12 @@ def create_customer():
     payload = request.get_json(silent=True) or {}
     customer_id = (payload.get('customer_id') or '').strip()
     name = (payload.get('name') or '').strip()
+    mobile = (payload.get('mobile') or '').strip()
+    email = (payload.get('email') or '').strip()
+    location = (payload.get('location') or '').strip()
 
-    if not customer_id or not name:
-        return jsonify({'message': 'customer_id and name are required'}), 400
+    if not customer_id or not name or not mobile or not email or not location:
+        return jsonify({'message': 'customer_id, name, mobile, email, and location are required'}), 400
 
     try:
         if customers_collection.find_one({'customer_id': customer_id}, {'_id': 1}):
@@ -135,9 +179,9 @@ def create_customer():
                 'name': name,
                 'dob': payload.get('dob'),
                 'address': payload.get('address'),
-                'mobile': payload.get('mobile'),
-                'email': payload.get('email'),
-                'location': payload.get('location'),
+                'mobile': mobile,
+                'email': email,
+                'location': location,
                 'created_date': now_datetime(),
             }
         )
@@ -189,27 +233,57 @@ def create_incident():
         if not customer:
             return jsonify({'message': 'Customer does not exist'}), 400
 
+        customer_email = (payload.get('customer_email') or customer.get('email') or '').strip()
+        if not customer_email:
+            return jsonify({'message': 'Customer email is required to send the issue ID'}), 400
+
         issue_id = make_issue_id()
         current_time = now_datetime()
 
-        incidents_collection.insert_one(
-            {
-                'issue_id': issue_id,
-                'customer_id': customer_id,
-                'customer_email': payload.get('customer_email') or customer.get('email'),
-                'summary': summary,
-                'description': payload.get('description'),
-                'severity': severity,
-                'status': 'New',
-                'assigned_to': payload.get('assigned_to'),
-                'logged_date': current_time,
-                'modified_date': current_time,
-                'progress_notes': payload.get('progress_notes'),
-                'resolution_description': payload.get('resolution_description'),
-                'resolution_date': None,
-            }
+        incident_doc = {
+            'issue_id': issue_id,
+            'customer_id': customer_id,
+            'customer_email': customer_email,
+            'summary': summary,
+            'description': payload.get('description'),
+            'severity': severity,
+            'status': 'New',
+            'assigned_to': payload.get('assigned_to'),
+            'logged_date': current_time,
+            'modified_date': current_time,
+            'progress_notes': payload.get('progress_notes'),
+            'resolution_description': payload.get('resolution_description'),
+            'resolution_date': None,
+            'notification_sent': False,
+            'notification_sent_at': None,
+        }
+
+        incidents_collection.insert_one(incident_doc)
+
+        try:
+            send_issue_id_email(customer_email, issue_id, summary)
+        except Exception as mail_err:
+            incidents_collection.update_one(
+                {'issue_id': issue_id},
+                {'$set': {'notification_error': str(mail_err), 'modified_date': now_datetime()}},
+            )
+            return (
+                jsonify(
+                    {
+                        'message': 'Incident created, but issue ID email delivery failed',
+                        'issue_id': issue_id,
+                        'email_sent': False,
+                        'error': str(mail_err),
+                    }
+                ),
+                201,
+            )
+
+        incidents_collection.update_one(
+            {'issue_id': issue_id},
+            {'$set': {'notification_sent': True, 'notification_sent_at': now_datetime()}},
         )
-        return jsonify({'message': 'Incident created', 'issue_id': issue_id}), 201
+        return jsonify({'message': 'Incident created and issue ID sent to email', 'issue_id': issue_id, 'email_sent': True}), 201
     except Exception as err:
         return jsonify({'message': 'Failed to create incident', 'error': str(err)}), 500
 
@@ -231,8 +305,11 @@ def list_incidents():
 @app.route('/api/incidents/<issue_id>', methods=['GET'])
 def get_incident(issue_id):
     try:
-        row = incidents_collection.find_one({'issue_id': issue_id}, {'_id': 0})
+        row = incidents_collection.find_one({'issue_id': issue_id, 'notification_sent': True}, {'_id': 0})
         if not row:
+            pending = incidents_collection.find_one({'issue_id': issue_id}, {'_id': 0, 'issue_id': 1})
+            if pending:
+                return jsonify({'message': 'Issue is not available for tracking until issue ID email is sent'}), 403
             return jsonify({'message': 'Incident not found'}), 404
 
         assigned_uid = row.get('assigned_to')
@@ -298,9 +375,13 @@ def update_incident_status(issue_id):
     new_status = normalize_status(payload.get('status', ''))
     new_note = (payload.get('progress_notes') or '').strip()
     resolution_description = (payload.get('resolution_description') or '').strip()
+    agent_uid = (payload.get('agent_uid') or '').strip()
 
     if not new_status:
         return jsonify({'message': 'status is required'}), 400
+
+    if not agent_uid:
+        return jsonify({'message': 'agent_uid is required'}), 400
 
     if new_status not in STATUS_VALUES:
         return jsonify({'message': f'status must be one of {STATUS_VALUES}'}), 400
@@ -308,10 +389,13 @@ def update_incident_status(issue_id):
     try:
         incident = incidents_collection.find_one(
             {'issue_id': issue_id},
-            {'_id': 0, 'issue_id': 1, 'status': 1, 'progress_notes': 1},
+            {'_id': 0, 'issue_id': 1, 'status': 1, 'progress_notes': 1, 'assigned_to': 1},
         )
         if not incident:
             return jsonify({'message': 'Incident not found'}), 404
+
+        if incident.get('assigned_to') != agent_uid:
+            return jsonify({'message': 'Only the assigned logged-in agent can update this incident'}), 403
 
         old_status = incident.get('status') or 'New'
         timestamp = now_string()
@@ -413,7 +497,7 @@ def get_incidents_by_customer_email():
     try:
         rows = [
             serialize_doc(row)
-            for row in incidents_collection.find({'customer_email': email}, {'_id': 0}).sort(
+            for row in incidents_collection.find({'customer_email': email, 'notification_sent': True}, {'_id': 0}).sort(
                 [('logged_date', DESCENDING), ('issue_id', DESCENDING)]
             )
         ]
@@ -439,9 +523,12 @@ def create_agent():
     uid = (payload.get('uid') or '').strip()
     name = (payload.get('name') or '').strip()
     password = payload.get('password') or ''
+    email = (payload.get('email') or '').strip()
+    phone = (payload.get('phone') or '').strip()
+    department = (payload.get('department') or '').strip()
 
-    if not uid or not name or not password:
-        return jsonify({'message': 'uid, name, and password are required'}), 400
+    if not uid or not name or not password or not email or not phone or not department:
+        return jsonify({'message': 'uid, name, password, email, phone, and department are required'}), 400
 
     try:
         if agents_collection.find_one({'uid': uid}, {'_id': 1}):
@@ -454,10 +541,11 @@ def create_agent():
                 'uid': uid,
                 'password': password_hash,
                 'name': name,
-                'email': payload.get('email'),
-                'phone': payload.get('phone'),
-                'department': payload.get('department'),
+                'email': email,
+                'phone': phone,
+                'department': department,
                 'created_date': now_datetime(),
+                'is_registered': True,
             }
         )
         return jsonify({'message': 'Agent created', 'uid': uid}), 201
@@ -489,6 +577,9 @@ def agent_login():
         agent = agents_collection.find_one({'uid': uid})
         if not agent:
             return jsonify({'message': 'Invalid credentials'}), 401
+
+        if not agent.get('is_registered', False):
+            return jsonify({'message': 'Only newly registered agents can login. Please register first.'}), 403
 
         stored_password = agent.get('password') or ''
 

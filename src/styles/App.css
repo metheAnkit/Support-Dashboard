@@ -612,6 +612,45 @@ body {
   margin: 0 auto;
 }
 
+.auth-card {
+  max-width: 900px;
+  width: 100%;
+}
+
+.auth-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: #f3f8ff;
+}
+
+.auth-toggle-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-tab-inactive);
+  background: transparent;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), box-shadow var(--transition);
+}
+
+.auth-toggle-btn:hover {
+  background: rgba(16, 42, 86, 0.08);
+  color: var(--color-heading);
+}
+
+.auth-toggle-btn.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #102a56, #0f766e);
+  box-shadow: 0 8px 18px rgba(16, 42, 86, 0.22);
+}
+
 .login-form {
   margin-top: 8px;
 }
@@ -716,6 +755,178 @@ body {
   margin-top: 8px;
 }
 
+/* ── Visual Refresh Overrides ─────────────────────────────── */
+:root {
+  --color-primary: #0f766e;
+  --color-primary-dark: #115e59;
+  --color-primary-light: #ecfeff;
+  --color-secondary: #475569;
+  --color-secondary-dark: #334155;
+  --color-bg: #f4f8ff;
+  --color-surface: #ffffff;
+  --color-border: #dbe6f5;
+  --color-heading: #0b1b3a;
+  --color-tab-active: #0f766e;
+  --color-tab-inactive: #5b6b8a;
+  --color-table-header: #102a56;
+  --color-row-hover: #e8f7ff;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow: 0 10px 30px rgba(15, 35, 95, 0.06);
+  --shadow-md: 0 16px 34px rgba(15, 35, 95, 0.12);
+  --shadow-lg: 0 24px 60px rgba(15, 35, 95, 0.2);
+}
+
+body {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(16, 42, 86, 0.09), transparent 30%),
+    radial-gradient(circle at 100% 0%, rgba(15, 118, 110, 0.1), transparent 35%),
+    linear-gradient(180deg, #eef4ff 0%, #f8fbff 35%, #f2f8ff 100%);
+  color: #1f2a44;
+}
+
+.app-container {
+  max-width: 1180px;
+}
+
+.app-header {
+  margin-top: 20px;
+  margin-bottom: 16px;
+  padding: 28px 30px;
+  border-radius: 18px;
+  border: 1px solid rgba(219, 230, 245, 0.9);
+  background: linear-gradient(120deg, #ffffff 0%, #f3f9ff 55%, #effdf9 100%);
+  box-shadow: var(--shadow);
+}
+
+.app-title {
+  font-size: 2rem;
+}
+
+.app-subtitle {
+  font-size: 0.95rem;
+}
+
+.tab-bar {
+  margin-top: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: var(--shadow);
+  padding: 4px;
+  gap: 4px;
+}
+
+.tab-button {
+  border-radius: 10px;
+  border-bottom: none;
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+.tab-button.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #102a56, #0f766e);
+  border-bottom-color: transparent;
+  box-shadow: 0 8px 18px rgba(16, 42, 86, 0.22);
+}
+
+.portal-container {
+  gap: 22px;
+}
+
+.portal-section {
+  border-color: rgba(199, 216, 238, 0.9);
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+  box-shadow: var(--shadow);
+}
+
+.section-heading {
+  font-size: 1.28rem;
+  margin-bottom: 18px;
+}
+
+.customer-portal .section-heading {
+  color: #0d2a57;
+}
+
+.agent-portal .section-heading {
+  color: #103248;
+}
+
+.agent-header {
+  border-radius: 16px;
+  border-color: rgba(199, 216, 238, 0.9);
+  background: linear-gradient(120deg, #132b57 0%, #14435f 60%, #0f766e 100%);
+  color: #e9f5ff;
+}
+
+.agent-welcome,
+.agent-subtitle {
+  color: inherit;
+}
+
+.form-input {
+  border-width: 1px;
+  background: #fefeff;
+}
+
+.form-input:focus {
+  box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.15);
+}
+
+.btn {
+  border-radius: 12px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #102a56, #0f766e);
+  border-color: #0f766e;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #0d2144, #0f5f59);
+}
+
+.btn-secondary {
+  color: #0d2a57;
+  border-color: #bfd2ee;
+  background: #f8fbff;
+}
+
+.table-wrapper {
+  border-radius: 14px;
+}
+
+.data-table thead tr {
+  background: linear-gradient(135deg, #102a56, #163d72);
+}
+
+.data-table tbody tr:nth-child(even) {
+  background: #f9fbff;
+}
+
+.incident-card {
+  border-radius: 14px;
+}
+
+.card-title {
+  background: linear-gradient(135deg, #102a56, #163d72);
+}
+
+.status-badge {
+  box-shadow: 0 4px 8px rgba(15, 23, 42, 0.18);
+}
+
+.message {
+  border-radius: 10px;
+}
+
+.modal-panel {
+  border-radius: 18px;
+}
+
 /* ── Responsive Layout (≤ 768px) ───────────────────────────── */
 @media (max-width: 768px) {
   .app-title {
@@ -758,6 +969,10 @@ body {
 
   .portal-section {
     padding: 20px 16px;
+  }
+
+  .auth-toggle {
+    grid-template-columns: 1fr;
   }
 
   /* Agent header stacks */

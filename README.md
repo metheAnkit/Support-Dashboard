@@ -29,6 +29,14 @@ REACT_APP_API_BASE_URL=http://localhost:5000
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017
 MONGODB_DB=support_system
+
+# SMTP (required for incident issue ID email)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@example.com
+SMTP_PASS=your-app-password
+SMTP_FROM=your-email@example.com
+SMTP_USE_TLS=true
 ```
 
 ## Database Setup
@@ -94,6 +102,8 @@ Frontend opens at `http://localhost:3000`.
 - `PUT /api/incidents/assign`
 - `PUT /api/incidents/<issue_id>/status`
 - `GET /api/incidents/search`
+
+Note: Issue tracking (`GET /api/incidents/<issue_id>` and `GET /api/customers/issues?email=...`) works only after the incident issue ID email is sent successfully.
 
 Supported search query params:
 - `issue_id`
