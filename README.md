@@ -198,4 +198,4 @@ See the `screenshots/` folder for:
 
 ## Additional Submission Files
 
-You can add your Postman collection JSON and ER diagram file to this repository before final submission.
+No additional files at this time.
