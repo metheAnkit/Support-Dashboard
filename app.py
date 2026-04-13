@@ -519,38 +519,7 @@ def get_incidents_by_customer_email():
 
 @app.route('/api/agents', methods=['POST'])
 def create_agent():
-    payload = request.get_json(silent=True) or {}
-    uid = (payload.get('uid') or '').strip()
-    name = (payload.get('name') or '').strip()
-    password = payload.get('password') or ''
-    email = (payload.get('email') or '').strip()
-    phone = (payload.get('phone') or '').strip()
-    department = (payload.get('department') or '').strip()
-
-    if not uid or not name or not password or not email or not phone or not department:
-        return jsonify({'message': 'uid, name, password, email, phone, and department are required'}), 400
-
-    try:
-        if agents_collection.find_one({'uid': uid}, {'_id': 1}):
-            return jsonify({'message': 'Agent already exists'}), 400
-
-        password_hash = hashpw(password.encode('utf-8'), gensalt()).decode('utf-8')
-
-        agents_collection.insert_one(
-            {
-                'uid': uid,
-                'password': password_hash,
-                'name': name,
-                'email': email,
-                'phone': phone,
-                'department': department,
-                'created_date': now_datetime(),
-                'is_registered': True,
-            }
-        )
-        return jsonify({'message': 'Agent created', 'uid': uid}), 201
-    except Exception as err:
-        return jsonify({'message': 'Failed to create agent', 'error': str(err)}), 500
+    return jsonify({'message': 'Agent self-registration is disabled. Use pre-created agent credentials.'}), 403
 
 
 @app.route('/api/agents/<uid>', methods=['GET'])
@@ -577,9 +546,6 @@ def agent_login():
         agent = agents_collection.find_one({'uid': uid})
         if not agent:
             return jsonify({'message': 'Invalid credentials'}), 401
-
-        if not agent.get('is_registered', False):
-            return jsonify({'message': 'Only newly registered agents can login. Please register first.'}), 403
 
         stored_password = agent.get('password') or ''
 
@@ -644,7 +610,7 @@ def get_agent_incidents(uid):
 
         rows = [
             serialize_doc(row)
-            for row in incidents_collection.find({'assigned_to': uid}, {'_id': 0}).sort(
+            for row in incidents_collection.find({'assigned_to': {'$exists': True, '$ne': None, '$ne': ''}}, {'_id': 0}).sort(
                 [('modified_date', DESCENDING), ('issue_id', DESCENDING)]
             )
         ]

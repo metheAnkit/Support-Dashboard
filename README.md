@@ -1,36 +1,47 @@
-# Incident Engine: Support Dashboard + Flask API
+# Incident Engine: Support Dashboard
+
+Support Dashboard is an incident management app with a React frontend and a Flask + MongoDB backend.
 
 This repository contains:
 - React frontend (`src/`) for customer and agent portals
 - Flask + MongoDB backend (`app.py`) for customer, incident, agent, and analytics APIs
 
+## Project Structure
+
+- `src/` React frontend for the customer and agent portals
+- `app.py` Flask backend API
+- `requirements.txt` Python backend dependencies
+- `package.json` frontend dependencies and scripts
+- `rasa/` separate chatbot project folder, not required to run the main dashboard
+
 ## Tech Stack
 
-- Python 3.10+
-- Flask
-- pymongo
-- flask-cors
-- bcrypt
-- MongoDB
-- React (frontend)
+- Frontend: React 19 + Vite
+- Backend: Flask + Flask-CORS
+- Database: MongoDB (pymongo)
+- Auth/security: bcrypt
+- Config: python-dotenv
 
 ## Prerequisites
 
-- Node.js 16+ and npm
+- Node.js 18+ and npm
 - Python 3.10+
-- MongoDB server running locally
+- MongoDB running locally (or a remote MongoDB URI)
 
 ## Environment Variables
 
-Copy `.env.example` to `.env` and update values as needed.
+Use the existing `.env` file (or create one at project root) with values like:
 
 ```env
-REACT_APP_API_BASE_URL=http://localhost:5000
+# Frontend
+VITE_API_BASE_URL=http://localhost:5000
+
+# Backend
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017
 MONGODB_DB=support_system
 
-# SMTP (required for incident issue ID email)
+# SMTP for sending issue ID emails
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=your-email@example.com
@@ -39,63 +50,54 @@ SMTP_FROM=your-email@example.com
 SMTP_USE_TLS=true
 ```
 
-## Database Setup
+## Quick Start
 
-Run the MongoDB seed script:
-
-```bash
-mongosh < mongo_seed.js
-```
-
-Optional query examples are available in `mongo_queries.js`.
-
-## Backend Setup
-
-Install Python dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-Run the backend server:
-
-```bash
-python app.py
-```
-
-Backend starts on `http://localhost:5000` by default.
-
-Health check:
-
-```http
-GET /
-```
-
-## Frontend Setup
-
-Install frontend dependencies:
+### 1) Install frontend dependencies
 
 ```bash
 npm install
 ```
 
-Run frontend app:
+### 2) Install backend dependencies
 
 ```bash
-npm start
+pip install -r requirements.txt
 ```
 
-Frontend opens at `http://localhost:3000`.
+### 3) Run backend
 
-## API Reference
+```bash
+python app.py
+```
 
-### Customer APIs
+Backend runs at `http://localhost:5000` by default.
+
+### 4) Run frontend
+
+```bash
+npm run dev
+```
+
+Frontend runs at `http://localhost:3000`.
+
+## Available Frontend Scripts
+
+- `npm run dev` Start development server
+- `npm run build` Create production build
+- `npm run preview` Preview production build locally
+
+## API Overview
+
+### Health
+- `GET /`
+
+### Customers
 - `POST /api/customers`
 - `GET /api/customers`
 - `GET /api/customers/<customer_id>`
 - `GET /api/customers/issues?email=<email>`
 
-### Incident APIs
+### Incidents
 - `POST /api/incidents`
 - `GET /api/incidents`
 - `GET /api/incidents/<issue_id>`
@@ -103,26 +105,14 @@ Frontend opens at `http://localhost:3000`.
 - `PUT /api/incidents/<issue_id>/status`
 - `GET /api/incidents/search`
 
-Note: Issue tracking (`GET /api/incidents/<issue_id>` and `GET /api/customers/issues?email=...`) works only after the incident issue ID email is sent successfully.
-
-Supported search query params:
-- `issue_id`
-- `customer_id`
-- `agent_id`
-- `status`
-- `severity`
-- `date_from`
-- `date_to`
-- `keyword`
-
-### Agent APIs
+### Agents
 - `POST /api/agents`
 - `POST /api/agents/login`
 - `GET /api/agents/<uid>`
 - `PUT /api/agents/<uid>`
 - `GET /api/agents/<uid>/incidents`
 
-### Analytics APIs
+### Analytics
 - `GET /api/analytics/stats`
 - `GET /api/analytics/status`
 - `GET /api/analytics/severity`
@@ -130,6 +120,7 @@ Supported search query params:
 
 ## Notes
 
+<<<<<<< HEAD
 | Method | Endpoint | Portal |
 |--------|----------|--------|
 | POST | `/api/customers` | Customer - Register |
@@ -199,3 +190,10 @@ See the `screenshots/` folder for:
 ## Additional Submission Files
 
 No additional files at this time.
+=======
+- Incident tracking endpoints are available only after issue ID email notification is sent.
+- Backend creates MongoDB indexes automatically at startup.
+- `build/` or `dist/` folders are generated artifacts and can be deleted safely.
+- `node_modules/`, `.venv/`, and `rasa/.venv/` are environment folders and are not required in source control.
+- If you only want the dashboard itself, the `rasa/` folder is optional.
+>>>>>>> 7b8db584 (Add support dashboard)
