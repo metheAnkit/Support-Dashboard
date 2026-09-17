@@ -12,29 +12,13 @@ const EMPTY_UPDATE_FORM = {
   resolution_description: '',
 };
 
-const EMPTY_AGENT_REGISTER_FORM = {
-  uid: '',
-  name: '',
-  password: '',
-  email: '',
-  phone: '',
-  department: '',
-};
-
 function AgentPortal() {
   const { agentUser, login, logout } = useAuth();
-  const [authMode, setAuthMode] = useState('login');
 
   // ── Login form state ───────────────────────────────────────────────────
-  const [loginForm, setLoginForm] = useState({ uid: '', password: '' });
+  const [loginForm, setLoginForm] = useState({ uid: '', email: '', password: '' });
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState('');
-
-  // ── Register agent state ───────────────────────────────────────────────
-  const [registerForm, setRegisterForm] = useState(EMPTY_AGENT_REGISTER_FORM);
-  const [registerLoading, setRegisterLoading] = useState(false);
-  const [registerError, setRegisterError] = useState('');
-  const [registerSuccess, setRegisterSuccess] = useState('');
 
   // ── Agent dashboard state ──────────────────────────────────────────────
   const [incidents, setIncidents] = useState([]);
@@ -91,73 +75,32 @@ function AgentPortal() {
   async function handleLoginSubmit(e) {
     e.preventDefault();
     setLoginError('');
-    if (!loginForm.uid.trim() || !loginForm.password) {
-      setLoginError('Agent UID and Password are required.');
+    if (!loginForm.uid || !loginForm.uid.trim()) {
+      setLoginError('Agent UID is required.');
       return;
     }
+
+    if (!loginForm.email || !loginForm.email.trim()) {
+      setLoginError('Agent Email is required.');
+      return;
+    }
+
+    if (!loginForm.password || !loginForm.password.trim()) {
+      setLoginError('Password is required.');
+      return;
+    }
+
     setLoginLoading(true);
     try {
-      await login(loginForm.uid.trim(), loginForm.password);
+      await login(
+        loginForm.uid.trim(),
+        loginForm.email.trim(),
+        loginForm.password
+      );
     } catch (err) {
       setLoginError(err.message || 'Login failed. Please check your credentials.');
     } finally {
       setLoginLoading(false);
-    }
-  }
-
-  function handleRegisterChange(e) {
-    const { name, value } = e.target;
-    setRegisterForm((prev) => ({ ...prev, [name]: value }));
-    if (registerError) setRegisterError('');
-  }
-
-  async function handleRegisterSubmit(e) {
-    e.preventDefault();
-    setRegisterError('');
-    setRegisterSuccess('');
-
-    if (
-      !registerForm.uid.trim() ||
-      !registerForm.name.trim() ||
-      !registerForm.password ||
-      !registerForm.email.trim() ||
-      !registerForm.phone.trim() ||
-      !registerForm.department.trim()
-    ) {
-      setRegisterError('UID, Name, Password, Email, Phone, and Department are required.');
-      return;
-    }
-
-    setRegisterLoading(true);
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/agents`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          uid: registerForm.uid.trim(),
-          name: registerForm.name.trim(),
-          password: registerForm.password,
-          email: registerForm.email.trim(),
-          phone: registerForm.phone.trim(),
-          department: registerForm.department.trim(),
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setRegisterError(data.message || data.error || 'Agent registration failed.');
-        return;
-      }
-
-      setRegisterSuccess(`Agent registered successfully. UID: ${data.uid || registerForm.uid.trim()}`);
-      setLoginForm((prev) => ({ ...prev, uid: registerForm.uid.trim(), password: '' }));
-      setRegisterForm(EMPTY_AGENT_REGISTER_FORM);
-      setAuthMode('login');
-    } catch {
-      setRegisterError('Network error. Could not register agent.');
-    } finally {
-      setRegisterLoading(false);
     }
   }
 
@@ -281,220 +224,84 @@ function AgentPortal() {
     return (
       <div className="portal-container agent-portal">
         <section className="portal-section login-section auth-card">
-          <div className="auth-toggle" role="tablist" aria-label="Agent authentication options">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={authMode === 'login'}
-              className={`auth-toggle-btn${authMode === 'login' ? ' active' : ''}`}
-              onClick={() => {
-                setAuthMode('login');
-                setRegisterError('');
-                setRegisterSuccess('');
-              }}
-            >
-              Agent Login
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={authMode === 'register'}
-              className={`auth-toggle-btn${authMode === 'register' ? ' active' : ''}`}
-              onClick={() => {
-                setAuthMode('register');
-                setLoginError('');
-              }}
-            >
-              Register Agent
-            </button>
-          </div>
+          <h2 className="section-heading">Agent Login</h2>
+          <p className="section-subtext">
+            Use your pre-assigned UID, email address, and password to access the dashboard. All fields are mandatory.
+          </p>
 
-          {authMode === 'login' ? (
-            <>
-              <h2 className="section-heading">Agent Login</h2>
-              <p className="section-subtext">
-                Please log in with your agent credentials to access the dashboard.
-              </p>
-
-              {loginError && (
-                <div className="message error-message">{loginError}</div>
-              )}
-
-              <form className="form login-form" onSubmit={handleLoginSubmit} noValidate>
-                <div className="form-group">
-                  <label htmlFor="uid" className="form-label">
-                    Agent UID <span className="required">*</span>
-                  </label>
-                  <input
-                    id="uid"
-                    name="uid"
-                    type="text"
-                    className="form-input"
-                    value={loginForm.uid}
-                    onChange={handleLoginChange}
-                    autoComplete="username"
-                    autoFocus
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="password" className="form-label">
-                    Password <span className="required">*</span>
-                  </label>
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    className="form-input"
-                    value={loginForm.password}
-                    onChange={handleLoginChange}
-                    autoComplete="current-password"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={loginLoading}
-                >
-                  {loginLoading ? (
-                    <span className="btn-loading">
-                      <span className="spinner-inline" />
-                      Logging in…
-                    </span>
-                  ) : (
-                    'Login'
-                  )}
-                </button>
-              </form>
-            </>
-          ) : (
-            <>
-              <h2 className="section-heading">Register New Agent</h2>
-              <p className="section-subtext">
-                Create a new agent account, then log in from the login tab.
-              </p>
-
-              {registerSuccess && (
-                <div className="message success-message">{registerSuccess}</div>
-              )}
-              {registerError && (
-                <div className="message error-message">{registerError}</div>
-              )}
-
-              <form className="form" onSubmit={handleRegisterSubmit} noValidate>
-                <div className="form-row form-row--two-col">
-                  <div className="form-group">
-                    <label htmlFor="register_uid" className="form-label">
-                      Agent UID <span className="required">*</span>
-                    </label>
-                    <input
-                      id="register_uid"
-                      name="uid"
-                      type="text"
-                      className="form-input"
-                      value={registerForm.uid}
-                      onChange={handleRegisterChange}
-                      autoComplete="off"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="register_name" className="form-label">
-                      Name <span className="required">*</span>
-                    </label>
-                    <input
-                      id="register_name"
-                      name="name"
-                      type="text"
-                      className="form-input"
-                      value={registerForm.name}
-                      onChange={handleRegisterChange}
-                      autoComplete="name"
-                    />
-                  </div>
-                </div>
-
-                <div className="form-row form-row--two-col">
-                  <div className="form-group">
-                    <label htmlFor="register_password" className="form-label">
-                      Password <span className="required">*</span>
-                    </label>
-                    <input
-                      id="register_password"
-                      name="password"
-                      type="password"
-                      className="form-input"
-                      value={registerForm.password}
-                      onChange={handleRegisterChange}
-                      autoComplete="new-password"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="register_department" className="form-label">
-                      Department <span className="required">*</span>
-                    </label>
-                    <input
-                      id="register_department"
-                      name="department"
-                      type="text"
-                      className="form-input"
-                      value={registerForm.department}
-                      onChange={handleRegisterChange}
-                    />
-                  </div>
-                </div>
-
-                <div className="form-row form-row--two-col">
-                  <div className="form-group">
-                    <label htmlFor="register_email" className="form-label">
-                      Email <span className="required">*</span>
-                    </label>
-                    <input
-                      id="register_email"
-                      name="email"
-                      type="email"
-                      className="form-input"
-                      value={registerForm.email}
-                      onChange={handleRegisterChange}
-                      autoComplete="email"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="register_phone" className="form-label">
-                      Phone <span className="required">*</span>
-                    </label>
-                    <input
-                      id="register_phone"
-                      name="phone"
-                      type="tel"
-                      className="form-input"
-                      value={registerForm.phone}
-                      onChange={handleRegisterChange}
-                      autoComplete="tel"
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={registerLoading}
-                >
-                  {registerLoading ? (
-                    <span className="btn-loading">
-                      <span className="spinner-inline" />
-                      Registering…
-                    </span>
-                  ) : (
-                    'Register Agent'
-                  )}
-                </button>
-              </form>
-            </>
+          {loginError && (
+            <div className="message error-message">{loginError}</div>
           )}
+
+          <form className="form login-form" onSubmit={handleLoginSubmit} noValidate>
+            <div className="form-row form-row--two-col">
+              <div className="form-group">
+                <label htmlFor="uid" className="form-label">
+                  Agent UID
+                  <span className="required"> *</span>
+                </label>
+                <input
+                  id="uid"
+                  name="uid"
+                  type="text"
+                  className="form-input"
+                  value={loginForm.uid}
+                  onChange={handleLoginChange}
+                  autoComplete="username"
+                  autoFocus
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="email" className="form-label">
+                  Agent Email
+                  <span className="required"> *</span>
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  className="form-input"
+                  value={loginForm.email}
+                  onChange={handleLoginChange}
+                  autoComplete="email"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">
+                Password <span className="required">*</span>
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                className="form-input"
+                value={loginForm.password}
+                onChange={handleLoginChange}
+                autoComplete="current-password"
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={loginLoading}
+            >
+              {loginLoading ? (
+                <span className="btn-loading">
+                  <span className="spinner-inline" />
+                  Logging in…
+                </span>
+              ) : (
+                'Login'
+              )}
+            </button>
+          </form>
         </section>
       </div>
     );
@@ -559,6 +366,7 @@ function AgentPortal() {
                     Severity <SortIcon field="severity" />
                   </th>
                   <th>Customer ID</th>
+                  <th>Assigned To</th>
                   <th>Last Modified</th>
                   <th>Actions</th>
                 </tr>
@@ -586,7 +394,13 @@ function AgentPortal() {
                         </span>
                       </td>
                       <td>{incident.customer_id}</td>
-                      <td>{formatDate(incident.last_modified || incident.updated_at)}</td>
+                      <td>
+                        <div>{incident.agent_name || 'N/A'}</div>
+                        <div className="table-subtext">
+                          {incident.agent_department || 'N/A'}
+                        </div>
+                      </td>
+                      <td>{formatDate(incident.modified_date || incident.last_modified || incident.updated_at || incident.logged_date)}</td>
                       <td>
                         <button
                           className="btn btn-sm btn-outline"

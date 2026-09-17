@@ -1,0 +1,207 @@
+version: "3.1"
+
+stories:
+- story: issue status path with slot
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: get_issue_status
+  - slot_was_set:
+    - issue_id: "ISSUE001"  # Example value
+  - action: action_get_issue_status
+
+- story: issue status with asking path
+  steps:
+  - intent: get_issue_status
+  - slot_was_set:
+    - issue_id: null
+  - action: utter_ask_issue_id
+  - intent: get_issue_status
+  - slot_was_set:
+    - issue_id: "ISSUE001"  # Example value
+  - action: action_get_issue_status
+
+- story: create incident path
+  steps:
+  - intent: create_incident
+  - action: incident_creation_form
+  - active_loop: incident_creation_form
+  - slot_was_set:
+    - customer_id: "CUST001"
+    - customer_email: "user@example.com"
+    - summary: "VPN disconnected"
+    - severity: "High"
+  - active_loop: null
+  - action: action_create_incident
+
+- story: login issue path
+  steps:
+  - intent: login_issue
+  - action: action_login_issue
+
+- story: network issue path
+  steps:
+  - intent: network_issue
+  - action: action_network_issue
+
+- story: payment issue path
+  steps:
+  - intent: payment_issue
+  - action: action_payment_issue
+
+- story: escalate issue path
+  steps:
+  - intent: escalate_issue
+  - action: action_escalate_issue
+
+- story: check status path
+  steps:
+  - intent: check_status
+  - action: action_get_issue_status
+
+- story: direct incident status path
+  steps:
+  - intent: incident_status
+  - action: utter_ask_issue_id
+  - intent: check_status_submit
+  - slot_was_set:
+    - issue_id: "A12BC789"  # Example value
+  - action: action_get_issue_status
+
+- story: login help path
+  steps:
+  - intent: login_help
+  - action: action_login_issue
+
+- story: resolve issue path
+  steps:
+  - intent: resolve_issue
+  - action: action_resolve_issue
+
+- story: assign agent path
+  steps:
+  - intent: assign_agent
+  - action: action_assign_agent
+
+- story: login issue guidance path
+  steps:
+  - intent: login_issue
+  - action: action_login_issue
+
+- story: network issue guidance path
+  steps:
+  - intent: network_issue
+  - action: action_network_issue
+
+- story: payment issue guidance path
+  steps:
+  - intent: payment_issue
+  - action: action_payment_issue
+
+- story: escalate issue path
+  steps:
+  - intent: escalate_issue
+  - action: action_escalate_issue
+
+- story: resolve issue path
+  steps:
+  - intent: resolve_issue
+  - action: action_resolve_issue
+
+- story: agent issues path with slot
+  steps:
+  - intent: get_agent_issues
+  - slot_was_set:
+    - agent_id: "AGT001"  # Example value
+  - action: action_get_agent_issues
+
+- story: agent issues with asking path
+  steps:
+  - intent: get_agent_issues
+  - slot_was_set:
+    - agent_id: null
+  - action: utter_ask_agent_id
+  - intent: get_agent_issues
+  - slot_was_set:
+    - agent_id: "AGT001"  # Example value
+  - action: action_get_agent_issues
+
+- story: total issues path
+  steps:
+  - intent: get_total_issues
+  - action: action_get_total_issues
+
+- story: issues by status path with slot
+  steps:
+  - intent: get_issues_by_status
+  - slot_was_set:
+    - status: "New"  # Example value
+  - action: action_get_issues_by_status
+
+- story: issues by status with asking path
+  steps:
+  - intent: get_issues_by_status
+  - slot_was_set:
+    - status: null
+  - action: utter_ask_status
+  - intent: get_issues_by_status
+  - slot_was_set:
+    - status: "New"  # Example value
+  - action: action_get_issues_by_status
+
+- story: issues by severity path with slot
+  steps:
+  - intent: get_issues_by_severity
+  - slot_was_set:
+    - severity: "High"  # Example value
+  - action: action_get_issues_by_severity
+
+- story: issues by severity with asking path
+  steps:
+  - intent: get_issues_by_severity
+  - slot_was_set:
+    - severity: null
+  - action: utter_ask_severity
+  - intent: get_issues_by_severity
+  - slot_was_set:
+    - severity: "High"  # Example value
+  - action: action_get_issues_by_severity
+
+- story: issues by date range path with slots
+  steps:
+  - intent: get_issues_by_date_range
+  - slot_was_set:
+    - start_date: "2025-12-01"  # Example value
+    - end_date: "2025-12-15"  # Example value
+  - action: action_get_issues_by_date_range
+
+- story: issues by date range with asking start date path
+  steps:
+  - intent: get_issues_by_date_range
+  - slot_was_set:
+    - start_date: null
+    - end_date: null
+  - action: utter_ask_start_date
+  - intent: get_issues_by_date_range
+  - slot_was_set:
+    - start_date: "2026-04-05"  # Example value
+    - end_date: null
+  - action: utter_ask_end_date
+  - intent: get_issues_by_date_range
+  - slot_was_set:
+    - start_date: "2026-04-05"  # Example value
+    - end_date: "2026-04-12"  # Example value
+  - action: action_get_issues_by_date_range
+
+- story: issues by date range with direct date input
+  steps:
+  - intent: get_issues_by_date_range
+  - slot_was_set:
+    - start_date: "2026-04-05"  # Example value
+    - end_date: null
+  - action: utter_ask_end_date
+  - intent: get_issues_by_date_range
+  - slot_was_set:
+    - start_date: "2026-04-05"  # Example value
+    - end_date: "2026-04-12"  # Example value
+  - action: action_get_issues_by_date_range

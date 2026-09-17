@@ -144,21 +144,19 @@ function CustomerPortal() {
 
       const createdIssueId = data.issue_id || '';
       const emailSent = data.email_sent === true;
+
       if (!emailSent) {
         const backendReason = data.error ? ` Reason: ${data.error}` : '';
-        setIncidentError(
-          `Incident was logged but issue ID email was not confirmed.${backendReason}`
+        setIncidentSuccess(
+          `Incident logged successfully. Issue ID ${createdIssueId} will be emailed when available.${backendReason}`
         );
-        return;
+      } else {
+        setIncidentSuccess(`Incident logged successfully. Issue ID ${createdIssueId} has been sent to your email.`);
       }
 
-      setIncidentSuccess(`Incident logged successfully. Issue ID ${createdIssueId} has been sent to your email.`);
       setIncidentForm(EMPTY_INCIDENT_FORM);
 
-      if (createdIssueId) {
-        setSearchType('issue_id');
-        setSearchInput(createdIssueId);
-      }
+
     } catch {
       setIncidentError('Network error. Could not log incident.');
     } finally {

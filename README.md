@@ -50,6 +50,7 @@ SMTP_FROM=your-email@example.com
 SMTP_USE_TLS=true
 ```
 
+
 ## Quick Start
 
 ### 1) Install frontend dependencies
@@ -196,4 +197,23 @@ No additional files at this time.
 - `build/` or `dist/` folders are generated artifacts and can be deleted safely.
 - `node_modules/`, `.venv/`, and `rasa/.venv/` are environment folders and are not required in source control.
 - If you only want the dashboard itself, the `rasa/` folder is optional.
+## Run all services (convenience)
+
+Use the included `run_all.ps1` (Windows PowerShell) to open new windows for the Rasa actions server, Rasa server (REST webhook), Flask backend, and frontend dev server.
+
+Run in PowerShell from the project root:
+
+```powershell
+.\run_all.ps1
+```
+
+For WSL/macOS/Linux, use the shell helper:
+
+```bash
+./run_all.sh
+```
+
+Notes:
+- Ensure your Python virtualenv is prepared and active or `.venv` exists and has installed dependencies from `requirements.txt`.
+- If you prefer manual control, use the Quick Start commands above to run each service individually.
 >>>>>>> 7b8db584 (Add support dashboard)

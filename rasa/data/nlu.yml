@@ -1,0 +1,1135 @@
+version: "3.1"
+
+nlu:
+- intent: create_incident
+  examples: |
+    - create incident
+    - create a new incident
+    - log a new incident
+    - report an issue
+    - open a ticket
+    - raise a ticket
+    - there is an issue with website not loading
+    - VPN disconnected
+    - need support for database connection failed
+    - can you help with server is down
+    - there is an issue with network issue
+    - website not loading
+    - database connection failed
+    - my issue is server is down
+    - login problem
+    - need support for printer not working
+    - my issue is server is down
+    - database connection failed
+    - urgent network issue
+    - need support for printer not working
+    - login problem
+    - urgent application crashed
+    - database connection failed
+    - please application crashed
+    - kindly fix application crashed
+    - can you help with VPN disconnected
+    - website not loading
+    - database connection failed
+    - there is an issue with application crashed
+    - there is an issue with login problem
+    - kindly fix website not loading
+    - my issue is server is down
+    - VPN disconnected
+    - my issue is network issue
+    - can you help with database connection failed
+    - need support for VPN disconnected
+    - kindly fix VPN disconnected
+    - kindly fix database connection failed
+    - please printer not working
+    - there is an issue with database connection failed
+    - can you help with login problem
+    - please printer not working
+    - can you help with network issue
+    - there is an issue with server is down
+    - please network issue
+    - kindly fix server is down
+    - urgent login problem
+    - there is an issue with network issue
+    - kindly fix website not loading
+    - there is an issue with printer not working
+    - need support for login problem
+    - can you help with website not loading
+    - my issue is printer not working
+    - need support for application crashed
+    - can you help with website not loading
+    - there is an issue with website not loading
+    - there is an issue with database connection failed
+    - kindly fix website not loading
+    - kindly fix network issue
+    - need support for login problem
+    - please network issue
+    - my issue is login problem
+    - there is an issue with server is down
+    - can you help with application crashed
+    - VPN disconnected
+    - urgent network issue
+- intent: get_agent_issues
+  examples: |
+    - Show me issues assigned to agent AGT001
+    - Show me issues assigned to agent AGT001
+    - need support for Show tickets for AGT003
+    - List all tickets for agent AGT002
+    - Show me issues assigned to agent AGT001
+    - Show me issues assigned to agent AGT001
+    - Show me issues assigned to agent AGT001
+    - List all tickets for agent AGT002
+    - my issue is Show tickets for AGT003
+    - Show me issues assigned to agent AGT001
+    - List all tickets for agent AGT002
+    - Show me issues assigned to agent AGT001
+    - Show me issues assigned to agent AGT001
+    - Show me issues assigned to agent AGT001
+    - need support for Show tickets for AGT003
+    - Show me issues assigned to agent AGT001
+    - List all tickets for agent AGT002
+    - kindly fix Show tickets for AGT003
+    - Show me issues assigned to agent AGT001
+    - my issue is Show tickets for AGT003
+    - Show me issues assigned to agent AGT001
+    - Show tickets for AGT003
+    - please Show tickets for AGT003
+    - List all tickets for agent AGT002
+    - List all tickets for agent AGT002
+    - Show me issues assigned to agent AGT001
+    - List all tickets for agent AGT002
+    - can you help with Show tickets for AGT003
+    - List all tickets for agent AGT002
+    - need support for Show tickets for AGT003
+    - List all tickets for agent AGT002
+    - List all tickets for agent AGT002
+    - List all tickets for agent AGT002
+    - Show me issues assigned to agent AGT001
+    - urgent Show tickets for AGT003
+    - there is an issue with Show tickets for AGT003
+    - List all tickets for agent AGT002
+    - List all tickets for agent AGT002
+    - Show me issues assigned to agent AGT001
+    - List all tickets for agent AGT002
+    - List all tickets for agent AGT002
+    - can you help with Show tickets for AGT003
+    - need support for Show tickets for AGT003
+    - List all tickets for agent AGT002
+    - there is an issue with Show tickets for AGT003
+    - Show me issues assigned to agent AGT001
+    - Show me issues assigned to agent AGT001
+    - Show me issues assigned to agent AGT001
+    - Show me issues assigned to agent AGT001
+    - kindly fix Show tickets for AGT003
+    - Show me issues assigned to agent AGT001
+    - Show tickets for AGT003
+    - List all tickets for agent AGT002
+    - List all tickets for agent AGT002
+    - Show me issues assigned to agent AGT001
+    - List all tickets for agent AGT002
+    - there is an issue with Show tickets for AGT003
+    - List all tickets for agent AGT002
+    - Show me issues assigned to agent AGT001
+    - List all tickets for agent AGT002
+    - Show me issues assigned to agent AGT001
+    - Show me issues assigned to agent AGT001
+    - my issue is Show tickets for AGT003
+    - please Show tickets for AGT003
+    - Show me issues assigned to agent AGT001
+    - List all tickets for agent AGT002
+    - Show me issues assigned to agent AGT001
+    - Show me issues assigned to agent AGT001
+    - kindly fix Show tickets for AGT003
+    - List all tickets for agent AGT002
+    - List all tickets for agent AGT002
+    - please Show tickets for AGT003
+    - kindly fix Show tickets for AGT003
+- intent: assign_agent
+  examples: |
+    - my issue is assign an engineer
+    - connect me to support
+    - my issue is need technical agent
+    - assign an engineer
+    - urgent assign support staff
+    - need support for need technical agent
+    - please assign support staff
+    - urgent assign support staff
+    - can you help with need technical agent
+    - my issue is need technical agent
+    - my issue is connect me to support
+    - need support for assign an engineer
+    - can you help with need technical agent
+    - connect me to support
+    - can you help with connect me to support
+    - kindly fix need technical agent
+    - there is an issue with need technical agent
+    - there is an issue with assign an engineer
+    - my issue is assign support staff
+    - there is an issue with assign support staff
+    - can you help with need technical agent
+    - need support for assign an engineer
+    - urgent assign an engineer
+    - urgent assign an engineer
+    - my issue is connect me to support
+    - please need technical agent
+    - urgent connect me to support
+    - urgent assign an engineer
+    - please assign support staff
+    - there is an issue with need technical agent
+    - assign an engineer
+    - there is an issue with assign an engineer
+    - my issue is assign an engineer
+    - there is an issue with assign an engineer
+    - there is an issue with assign an engineer
+    - need support for need technical agent
+    - kindly fix connect me to support
+    - can you help with need technical agent
+    - can you help with connect me to support
+    - urgent assign an engineer
+    - there is an issue with assign support staff
+    - need support for need technical agent
+    - my issue is need technical agent
+    - assign an engineer
+    - my issue is assign an engineer
+    - urgent connect me to support
+    - urgent need technical agent
+    - urgent need technical agent
+    - can you help with connect me to support
+    - please assign an engineer
+    - need technical agent
+    - my issue is assign an engineer
+    - there is an issue with assign support staff
+    - can you help with need technical agent
+    - kindly fix need technical agent
+    - need support for assign an engineer
+    - kindly fix assign an engineer
+    - there is an issue with need technical agent
+    - there is an issue with need technical agent
+    - please connect me to support
+    - need technical agent
+    - need technical agent
+    - urgent assign support staff
+- intent: resolve_issue
+  examples: |
+    - issue resolved
+    - the issue is resolved
+    - close this ticket
+    - mark ticket as resolved
+    - can you help with ticket solved
+    - can you help with ticket solved
+    - everything works now
+    - there is an issue with everything works now
+    - urgent ticket solved
+    - kindly fix problem fixed
+    - can you help with everything works now
+    - need support for problem fixed
+    - my issue is ticket solved
+    - my issue is problem fixed
+    - kindly fix ticket solved
+    - can you help with everything works now
+    - need support for everything works now
+    - kindly fix everything works now
+    - my issue is problem fixed
+    - need support for issue resolved
+    - everything works now
+    - urgent problem fixed
+    - please problem fixed
+    - my issue is everything works now
+    - urgent everything works now
+    - my issue is problem fixed
+    - please ticket solved
+    - please everything works now
+    - there is an issue with problem fixed
+    - everything works now
+    - can you help with problem fixed
+    - need support for issue resolved
+    - urgent everything works now
+    - can you help with issue resolved
+    - please ticket solved
+    - my issue is everything works now
+    - can you help with ticket solved
+    - can you help with problem fixed
+    - urgent issue resolved
+    - please ticket solved
+    - urgent issue resolved
+    - kindly fix issue resolved
+    - need support for ticket solved
+    - need support for issue resolved
+    - there is an issue with problem fixed
+    - need support for ticket solved
+    - everything works now
+    - my issue is everything works now
+    - my issue is issue resolved
+    - please problem fixed
+    - urgent problem fixed
+    - my issue is ticket solved
+    - need support for problem fixed
+    - please ticket solved
+    - there is an issue with issue resolved
+    - my issue is ticket solved
+    - please ticket solved
+    - there is an issue with ticket solved
+    - kindly fix ticket solved
+    - can you help with ticket solved
+    - my issue is problem fixed
+    - need support for problem fixed
+- intent: get_issues_by_severity
+  examples: |
+    - Count Medium severity issues
+    - Count Medium severity issues
+    - Show me all High severity issues
+    - Count Medium severity issues
+    - Count Medium severity issues
+    - Show me all High severity issues
+    - List Low priority tickets
+    - List Low priority tickets
+    - Count Medium severity issues
+    - Count Medium severity issues
+    - List Low priority tickets
+    - Count Medium severity issues
+    - List Low priority tickets
+    - Count Medium severity issues
+    - Show me all High severity issues
+    - Show me all High severity issues
+    - List Low priority tickets
+    - Show me all High severity issues
+    - List Low priority tickets
+    - Show me all High severity issues
+    - Count Medium severity issues
+    - Count Medium severity issues
+    - Count Medium severity issues
+    - Count Medium severity issues
+    - Show me all High severity issues
+    - Count Medium severity issues
+    - List Low priority tickets
+    - Count Medium severity issues
+    - Count Medium severity issues
+    - Show me all High severity issues
+    - Show me all High severity issues
+    - List Low priority tickets
+    - Count Medium severity issues
+    - List Low priority tickets
+    - Show me all High severity issues
+    - Show me all High severity issues
+    - Show me all High severity issues
+    - List Low priority tickets
+    - Show me all High severity issues
+    - Count Medium severity issues
+    - Count Medium severity issues
+    - Count Medium severity issues
+    - List Low priority tickets
+    - Count Medium severity issues
+    - Count Medium severity issues
+    - Show me all High severity issues
+    - Count Medium severity issues
+    - Show me all High severity issues
+    - Count Medium severity issues
+    - Show me all High severity issues
+    - Count Medium severity issues
+    - Show me all High severity issues
+    - Count Medium severity issues
+    - Show me all High severity issues
+    - Count Medium severity issues
+    - List Low priority tickets
+    - List Low priority tickets
+    - List Low priority tickets
+    - Count Medium severity issues
+    - List Low priority tickets
+    - Show me all High severity issues
+    - Show me all High severity issues
+    - Count Medium severity issues
+    - Show me all High severity issues
+    - List Low priority tickets
+    - List Low priority tickets
+    - Show me all High severity issues
+    - Count Medium severity issues
+    - List Low priority tickets
+    - Show me all High severity issues
+    - List Low priority tickets
+    - Count Medium severity issues
+    - Show me all High severity issues
+    - Show me all High severity issues
+    - Show me all High severity issues
+    - Show me all High severity issues
+    - List Low priority tickets
+    - Count Medium severity issues
+    - Show me all High severity issues
+    - List Low priority tickets
+- intent: greet
+  examples: |
+    - there is an issue with good evening
+    - need support for need help
+    - need support for hey there
+    - can you help with hi
+    - please hi
+    - need support for hey there
+    - need support for good morning
+    - hi
+    - urgent hey there
+    - please hello
+    - my issue is hi
+    - there is an issue with hello
+    - can you help with good evening
+    - good morning
+    - my issue is good evening
+    - there is an issue with hello
+    - please hello
+    - please need help
+    - need support for good evening
+    - there is an issue with need help
+    - need support for is anyone there
+    - need support for hi
+    - there is an issue with need help
+    - urgent good evening
+    - need help
+    - please is anyone there
+    - there is an issue with is anyone there
+    - there is an issue with need help
+    - hello
+    - need support for support team hello
+    - my issue is is anyone there
+    - please need help
+    - there is an issue with is anyone there
+    - can you help with hello
+    - there is an issue with is anyone there
+    - can you help with hello
+    - there is an issue with hey there
+    - my issue is hey there
+    - urgent hey there
+    - is anyone there
+    - can you help with hello
+    - my issue is need help
+    - kindly fix is anyone there
+    - need help
+    - need support for need help
+    - my issue is is anyone there
+    - hi
+    - kindly fix hi
+    - is anyone there
+    - my issue is support team hello
+    - need support for hello
+    - urgent good morning
+    - need support for good evening
+    - there is an issue with good evening
+    - kindly fix is anyone there
+    - good evening
+    - urgent good morning
+    - is anyone there
+    - urgent is anyone there
+    - my issue is support team hello
+    - can you help with good evening
+    - please is anyone there
+    - urgent good morning
+- intent: escalate_issue
+  examples: |
+    - escalate this issue
+    - send this to support
+    - escalate ticket
+    - need support for high priority problem
+    - urgent high priority problem
+    - escalate my issue
+    - urgent escalate my issue
+    - urgent critical server issue
+    - can you help with high priority problem
+    - high priority problem
+    - there is an issue with high priority problem
+    - need support for high priority problem
+    - need support for escalate my issue
+    - kindly fix escalate my issue
+    - my issue is this is urgent
+    - please this is urgent
+    - this is urgent
+    - there is an issue with high priority problem
+    - high priority problem
+    - need support for high priority problem
+    - there is an issue with high priority problem
+    - need support for this is urgent
+    - there is an issue with high priority problem
+    - can you help with escalate my issue
+    - can you help with critical server issue
+    - kindly fix this is urgent
+    - there is an issue with escalate my issue
+    - need support for this is urgent
+    - can you help with escalate my issue
+    - escalate my issue
+    - please this is urgent
+    - there is an issue with escalate my issue
+    - urgent this is urgent
+    - urgent high priority problem
+    - urgent high priority problem
+    - there is an issue with critical server issue
+    - kindly fix escalate my issue
+    - my issue is critical server issue
+    - kindly fix high priority problem
+    - please critical server issue
+    - please critical server issue
+    - kindly fix this is urgent
+    - please high priority problem
+    - there is an issue with escalate my issue
+    - there is an issue with escalate my issue
+    - urgent high priority problem
+    - urgent escalate my issue
+    - can you help with high priority problem
+    - can you help with high priority problem
+    - this is urgent
+    - escalate my issue
+    - kindly fix high priority problem
+    - urgent escalate my issue
+    - there is an issue with high priority problem
+    - kindly fix this is urgent
+    - my issue is escalate my issue
+    - can you help with escalate my issue
+    - need support for critical server issue
+    - need support for high priority problem
+    - this is urgent
+    - urgent critical server issue
+    - can you help with this is urgent
+    - escalate my issue
+    - can you help with critical server issue
+    - my issue is critical server issue
+    - urgent escalate my issue
+    - need support for high priority problem
+    - please high priority problem
+    - there is an issue with this is urgent
+    - please escalate my issue
+    - my issue is this is urgent
+    - critical server issue
+    - escalate my issue
+    - escalate my issue
+    - can you help with high priority problem
+    - can you help with escalate my issue
+    - can you help with high priority problem
+- intent: get_issues_by_status
+  examples: |
+    - Show me all New issues
+    - please Display Closed tickets
+    - Count of Resolved issues
+    - Show me all New issues
+    - Show me all New issues
+    - Count of Resolved issues
+    - Show me all New issues
+    - need support for Display Closed tickets
+    - Count of Resolved issues
+    - Count of Resolved issues
+    - Show me all New issues
+    - Count of Resolved issues
+    - Show me all New issues
+    - Show me all New issues
+    - Count of Resolved issues
+    - Show me all New issues
+    - Show me all New issues
+    - please Display Closed tickets
+    - Show me all New issues
+    - Show me all New issues
+    - Count of Resolved issues
+    - Show me all New issues
+    - Count of Resolved issues
+    - need support for Display Closed tickets
+    - urgent Display Closed tickets
+    - Display Closed tickets
+    - Show me all New issues
+    - there is an issue with Display Closed tickets
+    - Show me all New issues
+    - Count of Resolved issues
+    - urgent Display Closed tickets
+    - Count of Resolved issues
+    - Count of Resolved issues
+    - Show me all New issues
+    - urgent Display Closed tickets
+    - please Display Closed tickets
+    - Count of Resolved issues
+    - my issue is Display Closed tickets
+    - Show me all New issues
+    - Count of Resolved issues
+    - Show me all New issues
+    - Count of Resolved issues
+    - need support for Display Closed tickets
+    - Show me all New issues
+    - Show me all New issues
+    - kindly fix Display Closed tickets
+    - Show me all New issues
+    - Show me all New issues
+    - urgent Display Closed tickets
+    - Show me all New issues
+    - can you help with Display Closed tickets
+    - Show me all New issues
+    - Count of Resolved issues
+    - my issue is Display Closed tickets
+    - can you help with Display Closed tickets
+    - Count of Resolved issues
+    - Show me all New issues
+    - my issue is Display Closed tickets
+    - Show me all New issues
+    - please Display Closed tickets
+    - Count of Resolved issues
+    - Show me all New issues
+    - please Display Closed tickets
+    - urgent Display Closed tickets
+    - Show me all New issues
+    - my issue is Display Closed tickets
+    - Display Closed tickets
+    - Show me all New issues
+    - Show me all New issues
+    - Count of Resolved issues
+    - urgent Display Closed tickets
+    - please Display Closed tickets
+- intent: get_issue_status
+  examples: |
+    - Show me details for issue ISSUE002
+    - What is the status of issue ISSUE001?
+    - Show me details for issue ISSUE002
+    - my issue is Check status for ISSUE003
+    - please Check status for ISSUE003
+    - urgent Check status for ISSUE003
+    - What is the status of issue ISSUE001?
+    - What is the status of issue ISSUE001?
+    - What is the status of issue ISSUE001?
+    - Check status for ISSUE003
+    - please Check status for ISSUE003
+    - What is the status of issue ISSUE001?
+    - What is the status of issue ISSUE001?
+    - my issue is Check status for ISSUE003
+    - my issue is Check status for ISSUE003
+    - kindly fix Check status for ISSUE003
+    - Show me details for issue ISSUE002
+    - Show me details for issue ISSUE002
+    - urgent Check status for ISSUE003
+    - What is the status of issue ISSUE001?
+    - my issue is Check status for ISSUE003
+    - my issue is Check status for ISSUE003
+    - What is the status of issue ISSUE001?
+    - Show me details for issue ISSUE002
+    - can you help with Check status for ISSUE003
+    - Check status for ISSUE003
+    - Check status for ISSUE003
+    - can you help with Check status for ISSUE003
+    - urgent Check status for ISSUE003
+    - my issue is Check status for ISSUE003
+    - please Check status for ISSUE003
+    - What is the status of issue ISSUE001?
+    - Show me details for issue ISSUE002
+    - Show me details for issue ISSUE002
+    - What is the status of issue ISSUE001?
+    - Show me details for issue ISSUE002
+    - Show me details for issue ISSUE002
+    - What is the status of issue ISSUE001?
+    - What is the status of issue ISSUE001?
+    - urgent Check status for ISSUE003
+    - Show me details for issue ISSUE002
+    - Show me details for issue ISSUE002
+    - What is the status of issue ISSUE001?
+    - need support for Check status for ISSUE003
+    - Show me details for issue ISSUE002
+    - there is an issue with Check status for ISSUE003
+    - my issue is Check status for ISSUE003
+    - Check status for ISSUE003
+    - Show me details for issue ISSUE002
+    - can you help with Check status for ISSUE003
+    - there is an issue with Check status for ISSUE003
+    - What is the status of issue ISSUE001?
+    - What is the status of issue ISSUE001?
+    - What is the status of issue ISSUE001?
+    - Show me details for issue ISSUE002
+    - What is the status of issue ISSUE001?
+    - What is the status of issue ISSUE001?
+    - my issue is Check status for ISSUE003
+    - Show me details for issue ISSUE002
+    - Show me details for issue ISSUE002
+    - need support for Check status for ISSUE003
+- intent: goodbye
+  examples: |
+    - can you help with bye
+    - my issue is goodbye
+    - need support for bye
+    - can you help with bye
+    - bye
+    - kindly fix see you later
+    - my issue is thanks bye
+    - my issue is bye
+    - there is an issue with goodbye
+    - please thanks bye
+    - there is an issue with bye
+    - need support for bye
+    - please bye
+    - there is an issue with goodbye
+    - there is an issue with goodbye
+    - my issue is goodbye
+    - kindly fix thanks bye
+    - please thanks bye
+    - need support for see you
+    - can you help with see you
+    - my issue is goodbye
+    - there is an issue with goodbye
+    - please goodbye
+    - need support for see you later
+    - please see you later
+    - please thanks bye
+    - can you help with thanks bye
+    - need support for bye
+    - need support for bye
+    - my issue is see you later
+    - bye
+    - need support for see you
+    - there is an issue with bye
+    - please thanks bye
+    - can you help with see you later
+    - goodbye
+    - my issue is see you later
+    - there is an issue with goodbye
+    - can you help with thanks bye
+    - my issue is thanks bye
+    - can you help with see you
+    - kindly fix see you later
+    - urgent bye
+    - please see you later
+    - can you help with bye
+    - there is an issue with see you
+    - my issue is thanks bye
+    - bye
+    - urgent thanks bye
+    - my issue is see you later
+    - can you help with goodbye
+    - my issue is see you
+    - urgent bye
+    - there is an issue with thanks bye
+    - my issue is goodbye
+    - see you later
+    - kindly fix see you later
+    - need support for goodbye
+    - urgent goodbye
+    - there is an issue with thanks bye
+    - bye
+- intent: login_issue
+  examples: |
+    - I cannot sign in
+    - sign in failed
+    - login not working
+    - there is an issue with authentication failed
+    - please password reset needed
+    - need support for password reset needed
+    - there is an issue with cannot login
+    - account locked
+    - please authentication failed
+    - account locked
+    - urgent password reset needed
+    - can you help with password reset needed
+    - need support for cannot login
+    - my issue is password reset needed
+    - can you help with cannot login
+    - kindly fix authentication failed
+    - account locked
+    - can you help with cannot login
+    - account locked
+    - urgent password reset needed
+    - urgent authentication failed
+    - can you help with authentication failed
+    - there is an issue with cannot login
+    - account locked
+    - account locked
+    - urgent authentication failed
+    - there is an issue with cannot login
+    - account locked
+    - kindly fix cannot login
+    - my issue is password reset needed
+    - there is an issue with password reset needed
+    - there is an issue with cannot login
+    - account locked
+    - can you help with cannot login
+    - can you help with password reset needed
+    - kindly fix authentication failed
+    - can you help with cannot login
+    - please cannot login
+    - please cannot login
+    - please authentication failed
+    - kindly fix authentication failed
+    - account locked
+    - please cannot login
+    - my issue is authentication failed
+    - account locked
+    - kindly fix cannot login
+    - please password reset needed
+    - account locked
+    - there is an issue with password reset needed
+    - my issue is password reset needed
+    - account locked
+    - there is an issue with cannot login
+    - account locked
+    - urgent authentication failed
+    - account locked
+    - account locked
+    - need support for password reset needed
+    - password reset needed
+    - there is an issue with password reset needed
+    - urgent authentication failed
+    - kindly fix authentication failed
+    - my issue is cannot login
+    - kindly fix password reset needed
+    - please authentication failed
+    - please cannot login
+    - kindly fix password reset needed
+    - my issue is authentication failed
+    - my issue is authentication failed
+    - urgent cannot login
+    - please authentication failed
+    - my issue is cannot login
+    - cannot login
+    - can you help with password reset needed
+    - need support for authentication failed
+    - kindly fix cannot login
+    - authentication failed
+    - account locked
+    - kindly fix authentication failed
+    - account locked
+    - my issue is password reset needed
+    - password reset needed
+- intent: payment_issue
+  examples: |
+    - my payment is failing
+    - refund missing
+    - billing problem
+    - billing issue
+    - can you help with refund not received
+    - urgent payment failed
+    - urgent invoice problem
+    - please refund not received
+    - urgent payment failed
+    - my issue is payment failed
+    - payment failed
+    - urgent refund not received
+    - need support for billing issue
+    - my issue is payment failed
+    - please invoice problem
+    - can you help with billing issue
+    - my issue is payment failed
+    - my issue is refund not received
+    - billing issue
+    - please payment failed
+    - need support for refund not received
+    - please invoice problem
+    - can you help with billing issue
+    - can you help with payment failed
+    - need support for invoice problem
+    - can you help with invoice problem
+    - urgent payment failed
+    - need support for billing issue
+    - urgent payment failed
+    - invoice problem
+    - urgent billing issue
+    - please invoice problem
+    - can you help with refund not received
+    - please payment failed
+    - need support for invoice problem
+    - need support for billing issue
+    - need support for refund not received
+    - can you help with payment failed
+    - refund not received
+    - there is an issue with billing issue
+    - invoice problem
+    - urgent invoice problem
+    - my issue is invoice problem
+    - there is an issue with refund not received
+    - need support for billing issue
+    - there is an issue with billing issue
+    - kindly fix billing issue
+    - kindly fix payment failed
+    - urgent payment failed
+    - urgent invoice problem
+    - kindly fix billing issue
+    - can you help with refund not received
+    - urgent billing issue
+    - my issue is payment failed
+    - there is an issue with refund not received
+    - can you help with billing issue
+    - billing issue
+    - urgent billing issue
+    - there is an issue with payment failed
+    - please invoice problem
+    - my issue is payment failed
+    - please refund not received
+    - need support for payment failed
+    - there is an issue with invoice problem
+    - please invoice problem
+    - please billing issue
+    - need support for payment failed
+    - there is an issue with refund not received
+- intent: check_status
+  examples: |
+    - incident status
+    - need support for status update
+    - can you help with track issue
+    - status update
+    - need support for ticket progress
+    - status update
+    - my issue is show my ticket status
+    - my issue is check my ticket
+    - track issue
+    - need support for show my ticket status
+    - need support for status update
+    - there is an issue with show my ticket status
+    - my issue is track issue
+    - urgent track issue
+    - there is an issue with status update
+    - there is an issue with track issue
+    - kindly fix status update
+    - there is an issue with show my ticket status
+    - track issue
+    - urgent show my ticket status
+    - need support for check my ticket
+    - can you help with track issue
+    - kindly fix show my ticket status
+    - please check my ticket
+    - urgent track issue
+    - urgent ticket progress
+    - there is an issue with check my ticket
+    - my issue is show my ticket status
+    - my issue is check my ticket
+    - can you help with track issue
+    - show my ticket status
+    - can you help with show my ticket status
+    - status update
+    - urgent track issue
+    - kindly fix track issue
+    - show my ticket status
+    - my issue is status update
+    - kindly fix ticket progress
+    - can you help with ticket progress
+    - my issue is track issue
+    - urgent check my ticket
+    - kindly fix status update
+    - there is an issue with status update
+    - check my ticket
+    - urgent track issue
+    - need support for status update
+    - urgent ticket progress
+    - urgent check my ticket
+    - urgent ticket progress
+    - can you help with check my ticket
+    - need support for status update
+    - need support for show my ticket status
+    - urgent show my ticket status
+    - kindly fix show my ticket status
+    - need support for ticket progress
+    - kindly fix show my ticket status
+    - my issue is show my ticket status
+    - need support for check my ticket
+    - can you help with show my ticket status
+    - please status update
+    - please track issue
+    - kindly fix status update
+    - urgent status update
+    - there is an issue with ticket progress
+    - there is an issue with track issue
+    - please check my ticket
+    - my issue is track issue
+- intent: get_total_issues
+  examples: |
+    - Total issue count
+    - Count all issues
+    - Count all issues
+    - Count all issues
+    - How many issues are there in total?
+    - How many issues are there in total?
+    - How many issues are there in total?
+    - Total issue count
+    - How many issues are there in total?
+    - Count all issues
+    - Total issue count
+    - Total issue count
+    - Count all issues
+    - Count all issues
+    - How many issues are there in total?
+    - Count all issues
+    - Total issue count
+    - Count all issues
+    - Total issue count
+    - Count all issues
+    - Count all issues
+    - How many issues are there in total?
+    - Total issue count
+    - Total issue count
+    - How many issues are there in total?
+    - Count all issues
+    - Count all issues
+    - Count all issues
+    - How many issues are there in total?
+    - Count all issues
+    - Count all issues
+    - How many issues are there in total?
+    - Total issue count
+    - Count all issues
+    - Total issue count
+    - Total issue count
+    - How many issues are there in total?
+    - How many issues are there in total?
+    - Count all issues
+    - Count all issues
+    - Count all issues
+    - How many issues are there in total?
+    - Total issue count
+    - Total issue count
+    - How many issues are there in total?
+    - How many issues are there in total?
+    - Count all issues
+    - Total issue count
+    - How many issues are there in total?
+    - Total issue count
+    - Total issue count
+    - Total issue count
+    - Count all issues
+    - How many issues are there in total?
+- intent: network_issue
+  examples: |
+    - internet down
+    - network problem
+    - cannot connect to wifi
+    - urgent LAN cable issue
+    - there is an issue with LAN cable issue
+    - urgent LAN cable issue
+    - need support for wifi disconnected
+    - kindly fix LAN cable issue
+    - can you help with network latency issue
+    - need support for network latency issue
+    - kindly fix internet is slow
+    - can you help with wifi disconnected
+    - network latency issue
+    - there is an issue with LAN cable issue
+    - there is an issue with network latency issue
+    - wifi disconnected
+    - internet is slow
+    - urgent network latency issue
+    - please wifi disconnected
+    - can you help with internet is slow
+    - there is an issue with internet is slow
+    - LAN cable issue
+    - kindly fix LAN cable issue
+    - need support for wifi disconnected
+    - need support for LAN cable issue
+    - can you help with wifi disconnected
+    - network latency issue
+    - there is an issue with LAN cable issue
+    - please wifi disconnected
+    - there is an issue with LAN cable issue
+    - my issue is network latency issue
+    - network latency issue
+    - please network latency issue
+    - there is an issue with internet is slow
+    - please network latency issue
+    - kindly fix network latency issue
+    - urgent wifi disconnected
+    - internet is slow
+    - there is an issue with internet is slow
+    - urgent internet is slow
+    - there is an issue with network latency issue
+    - my issue is LAN cable issue
+    - there is an issue with network latency issue
+    - can you help with network latency issue
+    - there is an issue with wifi disconnected
+    - urgent internet is slow
+    - there is an issue with network latency issue
+    - kindly fix network latency issue
+    - please wifi disconnected
+    - there is an issue with internet is slow
+    - please internet is slow
+    - my issue is wifi disconnected
+    - can you help with LAN cable issue
+    - network latency issue
+    - please internet is slow
+    - need support for network latency issue
+    - there is an issue with network latency issue
+    - there is an issue with LAN cable issue
+    - my issue is internet is slow
+    - my issue is internet is slow
+    - there is an issue with LAN cable issue
+    - wifi disconnected
+    - my issue is internet is slow
+    - urgent LAN cable issue
+    - urgent internet is slow
+    - urgent LAN cable issue
+    - urgent internet is slow
+    - kindly fix LAN cable issue
+    - kindly fix LAN cable issue
+    - there is an issue with internet is slow
+    - my issue is wifi disconnected
+    - there is an issue with network latency issue
+    - kindly fix wifi disconnected
+    - my issue is network latency issue
+
+- intent: incident_status
+  examples: |
+    - incident status
+    - check incident status
+    - view incident status
+    - track my incident
+    - incident tracking
+    - status of my incident
+    - find my incident
+    - show the incident status
+
+- intent: login_help
+  examples: |
+    - login help
+    - I cannot log in
+    - I am unable to sign in
+    - help me with login
+    - password reset help
+    - my login is failing
+    - sign in problem
+    - unable to access my account
+    - login issue
+    - I forgot my password
+    - I need help signing in
+    - account access help
+    - password incorrect
+    - my account is locked
+    - authentication failed
+    - my email is not found
+    - my UID is not working
+    - OTP not received
+    - session expired
+    - login page not loading
+    - login server down
+    - 2FA code failed
+    - access denied
+    - dashboard not opening
+    - reset my password
+
+- intent: check_status_submit
+  examples: |
+    - A12BC789
+    - TCK-2042
+    - INC000123
+    - ISS-1001
+    - SRV-4512
+    - INC-88991
+    - 2026-04-05
+    - 2026-04-12
+    - the issue id is A12BC789
+    - ticket number TCK-2042
+    - incident id INC000123
+    - my reference is ISS-1001
+
+- intent: get_issues_by_date_range
+  examples: |
+    - 2026-04-05
+    - 2026-04-12
+    - show issues from 2026-04-05 to 2026-04-12
+    - show incidents between 2026-04-01 and 2026-04-30
+    - list tickets from 2026-04-01 to 2026-04-07
+    - report issues between 2026-04-10 and 2026-04-15
+    - issues from 2026-04-01 to 2026-04-05
+    - incidents logged on 2026-04-05
+    - tickets for 2026-04-05
+    - find incidents from 2026-04-05
+    - issues after 2026-04-01 and before 2026-04-12
+
+- regex: issue_id
+  examples: |
+    \b[A-Z][A-Z0-9-]{5,11}\b
+
+- regex: start_date
+  examples: |
+    \b\d{4}-\d{2}-\d{2}\b
+
+- regex: end_date
+  examples: |
+    \b\d{4}-\d{2}-\d{2}\b

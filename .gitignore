@@ -1,0 +1,44 @@
+# Python virtual environments
+.venv/
+rasa/.venv/
+
+# Node.js dependencies
+node_modules/
+
+# Build / distribution output
+dist/
+build/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Python test and coverage output
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Logs and local runtime data
+*.log
+*.sqlite3
+*.db
+
+# Rasa transient and model folders
+rasa/.rasa/
+rasa/models/
+rasa/logs/
+
+# Vite output
+.vite/

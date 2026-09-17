@@ -1,0 +1,144 @@
+version: "3.1"
+
+rules:
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: Say 'I am a bot' anytime the user challenges
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+
+- rule: Start incident creation form
+  steps:
+  - intent: create_incident
+  - action: incident_creation_form
+  - active_loop: incident_creation_form
+
+- rule: Start incident creation from a login problem
+  steps:
+  - intent: login_issue
+  - action: action_login_issue
+
+- rule: Start incident creation from a network problem
+  steps:
+  - intent: network_issue
+  - action: action_network_issue
+
+- rule: Start incident creation from a payment problem
+  steps:
+  - intent: payment_issue
+  - action: action_payment_issue
+
+- rule: Start incident creation from an escalation request
+  steps:
+  - intent: escalate_issue
+  - action: action_escalate_issue
+
+- rule: Ask for issue_id if not provided
+  condition:
+  - active_loop: null
+  steps:
+  - intent: get_issue_status
+  - slot_was_set:
+    - issue_id: null
+  - action: utter_ask_issue_id
+
+- rule: Ask for issue_id for direct incident status requests
+  condition:
+  - active_loop: null
+  steps:
+  - intent: incident_status
+  - action: utter_ask_issue_id
+
+- rule: Handle check status requests
+  condition:
+  - active_loop: null
+  steps:
+  - intent: check_status
+  - action: action_get_issue_status
+
+- rule: Ask for agent_id if not provided
+  condition:
+  - active_loop: null
+  steps:
+  - intent: get_agent_issues
+  - slot_was_set:
+    - agent_id: null
+  - action: utter_ask_agent_id
+
+- rule: Ask for status if not provided
+  condition:
+  - active_loop: null
+  steps:
+  - intent: get_issues_by_status
+  - slot_was_set:
+    - status: null
+  - action: utter_ask_status
+
+- rule: Ask for severity if not provided
+  condition:
+  - active_loop: null
+  steps:
+  - intent: get_issues_by_severity
+  - slot_was_set:
+    - severity: null
+  - action: utter_ask_severity
+
+- rule: Ask for start_date if not provided
+  condition:
+  - active_loop: null
+  steps:
+  - intent: get_issues_by_date_range
+  - slot_was_set:
+    - start_date: null
+    - end_date: null
+  - action: utter_ask_start_date
+
+- rule: Ask for end_date if not provided
+  condition:
+  - active_loop: null
+  steps:
+  - intent: get_issues_by_date_range
+  - slot_was_set:
+    - start_date: "2025-12-01"
+    - end_date: null
+  - action: utter_ask_end_date
+
+- rule: Respond with login help guidance
+  condition:
+  - active_loop: null
+  steps:
+  - intent: login_help
+  - action: action_login_issue
+
+- rule: Handle resolved issue requests
+  condition:
+  - active_loop: null
+  steps:
+  - intent: resolve_issue
+  - action: action_resolve_issue
+
+- rule: Handle assign agent requests
+  condition:
+  - active_loop: null
+  steps:
+  - intent: assign_agent
+  - action: action_assign_agent
+
+- rule: Handle submitted issue id from the web UI
+  condition:
+  - active_loop: null
+  steps:
+  - intent: check_status_submit
+  - action: action_get_issue_status
+
+- rule: Submit incident creation form
+  condition:
+  - active_loop: incident_creation_form
+  steps:
+  - action: incident_creation_form
+  - active_loop: null
+  - action: action_create_incident

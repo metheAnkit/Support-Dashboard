@@ -1,0 +1,146 @@
+version: "3.1"
+
+stories:
+- story: happy path 1
+  steps:
+  - user: |
+      hello there!
+    intent: greet
+  - action: utter_greet
+  - user: |
+      amazing
+    intent: mood_great
+  - action: utter_happy
+
+- story: happy path 2
+  steps:
+  - user: |
+      hello there!
+    intent: greet
+  - action: utter_greet
+  - user: |
+      amazing
+    intent: mood_great
+  - action: utter_happy
+  - user: |
+      bye-bye!
+    intent: goodbye
+  - action: utter_goodbye
+
+- story: sad path 1
+  steps:
+  - user: |
+      hello
+    intent: greet
+  - action: utter_greet
+  - user: |
+      not good
+    intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - user: |
+      yes
+    intent: affirm
+  - action: utter_happy
+
+- story: sad path 2
+  steps:
+  - user: |
+      hello
+    intent: greet
+  - action: utter_greet
+  - user: |
+      not good
+    intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - user: |
+      not really
+    intent: deny
+  - action: utter_goodbye
+
+- story: sad path 3
+  steps:
+  - user: |
+      hi
+    intent: greet
+  - action: utter_greet
+  - user: |
+      very terrible
+    intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - user: |
+      no
+    intent: deny
+  - action: utter_goodbye
+
+- story: say goodbye
+  steps:
+  - user: |
+      bye-bye!
+    intent: goodbye
+  - action: utter_goodbye
+
+- story: bot challenge
+  steps:
+  - user: |
+      are you a bot?
+    intent: bot_challenge
+  - action: utter_iamabot
+
+- story: login help path
+  steps:
+  - user: |
+      I need login help
+    intent: login_help
+  - action: action_login_issue
+
+- story: create incident path
+  steps:
+  - user: |
+      create a new incident
+    intent: create_incident
+  - action: incident_creation_form
+
+- story: login issue path
+  steps:
+  - user: |
+      I cannot log in
+    intent: login_issue
+  - action: incident_creation_form
+
+- story: network issue path
+  steps:
+  - user: |
+      wifi disconnected
+    intent: network_issue
+  - action: incident_creation_form
+
+- story: payment issue path
+  steps:
+  - user: |
+      payment failed
+    intent: payment_issue
+  - action: incident_creation_form
+
+- story: resolve issue path
+  steps:
+  - user: |
+      everything works now
+    intent: resolve_issue
+  - action: utter_issue_resolved
+
+- story: check status path
+  steps:
+  - user: |
+      check status
+    intent: check_status
+  - action: action_get_issue_status
+
+- story: date range path
+  steps:
+  - user: |
+      show issues from 2026-04-05 to 2026-04-12
+    intent: get_issues_by_date_range
+  - action: action_get_issues_by_date_range

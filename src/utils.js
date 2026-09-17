@@ -39,3 +39,90 @@ export function getSeverityColor(severity) {
       return '#95a5a6';
   }
 }
+
+/**
+ * Send a message directly to a running Rasa REST webhook.
+ * Example Rasa endpoint: http://localhost:5005/webhooks/rest/webhook
+ * @param {string} message
+ * @param {string} senderId
+ */
+export async function sendMessageToRasa(message, senderId = 'web_user') {
+  const url =
+    (window?.RASA_WEBHOOK_URL) ||
+    (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_RASA_WEBHOOK_URL) ||
+    'http://localhost:5005/webhooks/rest/webhook';
+  let res;
+  try {
+    res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sender: senderId, message }),
+    });
+  } catch (err) {
+    console.error('Network error contacting Rasa:', err);
+    throw new Error(`Network error contacting Rasa at ${url}: ${err.message}`);
+  }
+
+  if (!res.ok) {
+    let details = '';
+    try {
+      details = await res.text();
+    } catch (e) {
+      details = '';
+    }
+    throw new Error(`Rasa request failed: ${res.status} ${details}`);
+  }
+
+  try {
+    const json = await res.json(); // array of bot messages
+    // If Rasa returned an empty array, try to get more details from the /status endpoint
+    if (Array.isArray(json) && json.length === 0) {
+      try {
+        const base = url.replace(/\/webhooks\/rest\/webhook\/?$/, '');
+        const statusRes = await fetch(`${base}/status`);
+        if (statusRes.ok) {
+          const statusJson = await statusRes.json();
+          if (statusJson && statusJson.status === 'failure' && statusJson.message) {
+            throw new Error(`Rasa status: ${statusJson.message}`);
+          }
+        } else if (statusRes.status) {
+          const text = await statusRes.text().catch(() => '');
+          throw new Error(`Rasa status check failed: ${statusRes.status} ${text}`);
+        }
+      } catch (e) {
+        // surface status errors to frontend
+        throw e;
+      }
+    }
+    return json;
+  } catch (err) {
+    let details = '';
+    try {
+      details = await res.clone().text();
+    } catch (e) {
+      details = '';
+    }
+    console.error('Invalid JSON response from Rasa:', err, details);
+    throw new Error(`Invalid JSON response from Rasa: ${details}`);
+  }
+}
+
+/**
+ * Send a message to the project's backend proxy which forwards to Rasa.
+ * Useful when you want to attach auth/session info in the backend.
+ * @param {string} message
+ * @param {string} senderId
+ */
+export async function sendMessageToBackend(message, senderId = 'web_user') {
+  const url = '/api/chat';
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sender: senderId, message }),
+  });
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Backend chat proxy failed: ${res.status} ${errText}`);
+  }
+  return res.json(); // forwarded Rasa response
+}

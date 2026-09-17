@@ -6,11 +6,11 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.REACT_
 function AuthProvider({ children }) {
   const [agentUser, setAgentUser] = useState(null);
 
-  async function login(uid, password) {
+  async function login(uid, email, password) {
     const response = await fetch(`${API_BASE_URL}/api/agents/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ uid, password }),
+      body: JSON.stringify({ uid, email, password }),
     });
 
     const data = await response.json();

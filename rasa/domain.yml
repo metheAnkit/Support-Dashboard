@@ -1,0 +1,201 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - create_incident
+  - assign_agent
+  - check_status
+  - get_issue_status
+  - get_agent_issues
+  - get_total_issues
+  - get_issues_by_status
+  - get_issues_by_severity
+  - get_issues_by_date_range
+  - escalate_issue
+  - incident_status
+  - login_help
+  - login_issue
+  - network_issue
+  - payment_issue
+  - check_status_submit
+  - resolve_issue
+
+entities:
+  - issue_id
+  - agent_id
+  - status
+  - severity
+  - start_date
+  - end_date
+
+slots:
+  customer_id:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_text
+
+  customer_email:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_text
+
+  summary:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_text
+
+  severity:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: severity
+    - type: from_text
+
+  issue_id:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: issue_id
+  
+  agent_id:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: agent_id
+  
+  status:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: status
+  start_date:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: start_date
+  
+  end_date:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: end_date
+
+forms:
+  incident_creation_form:
+    required_slots:
+    - customer_id
+    - customer_email
+    - summary
+    - severity
+
+responses:
+  utter_greet:
+  - text: "Hello! I'm your Support Management Assistant. How can I help you today?"
+
+  utter_cheer_up:
+  - text: "Here's something to cheer you up:"
+    image: "https://i.imgur.com/nGF1K8f.jpg"
+
+  utter_did_that_help:
+  - text: "Did that help you?"
+
+  utter_happy:
+  - text: "Great! How can I assist you with the support system?"
+
+  utter_goodbye:
+  - text: "Goodbye! Have a great day."
+
+  utter_iamabot:
+  - text: "I am a bot, powered by Rasa, designed to help you manage the support system."
+
+  utter_incident_created:
+  - text: "I can help create a new incident. Let's collect the details first."
+
+  utter_assign_agent:
+  - text: "I can't assign an agent directly from the chatbot. If you want support routed, create an incident and it will be tracked by the support team."
+
+  utter_issue_resolved:
+  - text: "If your issue is resolved, share the issue ID and I can show its status, or use the agent portal to close it."
+
+  utter_ticket_status:
+  - text: "Please provide the issue ID or ticket number and I will check the status."
+
+  utter_login_issue:
+  - text: "I can help with login problems. I will route this as an incident so it can be tracked properly."
+
+  utter_network_issue:
+  - text: "I can help log this network problem as an incident."
+
+  utter_payment_issue:
+  - text: "I can help log this billing or payment problem as an incident."
+
+  utter_escalate_issue:
+  - text: "I can help escalate this as an incident so the support team can review it."
+
+  utter_login_help:
+  - text: "For login help, try resetting your password, confirm your username, and make sure the account is active."
+
+  utter_ask_customer_id:
+  - text: "Please provide your Customer ID."
+
+  utter_ask_customer_email:
+  - text: "Please provide the email address where the issue ID should be sent."
+
+  utter_ask_summary:
+  - text: "Please briefly describe the incident."
+
+  utter_ask_incident_creation_form_severity:
+  - text: "Please choose a severity: Low, Medium, or High."
+
+  utter_ask_issue_id:
+  - text: "Please provide the Issue ID or ticket number you want me to check."
+
+  utter_ask_agent_id:
+  - text: "Please provide the Agent ID you want to check."
+
+  utter_ask_status:
+  - text: "Which status would you like to filter by? (New, Assigned, In Progress, Resolved, Closed)"
+
+  utter_ask_severity:
+  - text: "Which severity would you like to filter by? (Low, Medium, High)"
+
+  utter_ask_start_date:
+  - text: "Please provide the start date (YYYY-MM-DD)."
+
+  utter_ask_end_date:
+  - text: "Please provide the end date (YYYY-MM-DD)."
+
+actions:
+  - action_create_incident
+  - action_get_issue_status
+  - action_get_agent_issues
+  - action_assign_agent
+  - action_get_total_issues
+  - action_get_issues_by_status
+  - action_get_issues_by_severity
+  - action_get_issues_by_date_range
+  - action_login_issue
+  - action_network_issue
+  - action_payment_issue
+  - action_escalate_issue
+  - action_resolve_issue
+  - validate_incident_creation_form
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
