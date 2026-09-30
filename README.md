@@ -216,4 +216,3 @@ For WSL/macOS/Linux, use the shell helper:
 Notes:
 - Ensure your Python virtualenv is prepared and active or `.venv` exists and has installed dependencies from `requirements.txt`.
 - If you prefer manual control, use the Quick Start commands above to run each service individually.
->>>>>>> 7b8db584 (Add support dashboard)
